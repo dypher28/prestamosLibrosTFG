@@ -1,0 +1,227 @@
+<ContentPage
+    x:Class="prestamosLibrosTFG.Views.FormView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behavior="clr-namespace:prestamosLibrosTFG.Behaviors"
+    xmlns:converters="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewmodels="clr-namespace:prestamosLibrosTFG.ViewModels"
+    x:Name="form_view"
+    x:DataType="viewmodels:FormViewModel"
+    BindingContext="{viewmodels:FormViewModel}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SelectedCursoConverter x:Key="SelectedCursoConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Border
+        Margin="30"
+        BackgroundColor="SlateGray"
+        HeightRequest="500"
+        StrokeShape="RoundRectangle 20"
+        StrokeThickness="0">
+
+        <Border.Shadow>
+            <Shadow
+                Brush="White"
+                Opacity="0.8"
+                Radius="10"
+                Offset="5,5" />
+        </Border.Shadow>
+
+        <HorizontalStackLayout
+            Padding="40"
+            HeightRequest="500"
+            Spacing="40">
+
+            <VerticalStackLayout VerticalOptions="Center">
+                <!--  Imagen con sombra  -->
+                <Border
+                    BackgroundColor="Transparent"
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="0">
+
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Opacity="0.4"
+                            Radius="10"
+                            Offset="5,5" />
+                    </Border.Shadow>
+
+                    <ffimage:CachedImage
+                        ErrorPlaceholder="librodefecto.png"
+                        HeightRequest="300"
+                        Source="{Binding Libro.Imagen.FileName}"
+                        WidthRequest="200" />
+
+                </Border>
+
+                <Button
+                    Margin="0,20,0,0"
+                    BackgroundColor="RoyalBlue"
+                    Command="{Binding SeleccionarImagenCommand}"
+                    HeightRequest="50"
+                    Text="SELECCIONAR"
+                    WidthRequest="200" />
+
+            </VerticalStackLayout>
+
+            <!--  Formulario a la derecha  -->
+            <VerticalStackLayout
+                Spacing="20"
+                VerticalOptions="Center"
+                WidthRequest="250">
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="TÍTULO:"
+                    TextColor="White" />
+
+                <material:TextField
+                    Title="Título del libro"
+                    AccentColor="White"
+                    BorderColor="Beige"
+                    FontSize="16"
+                    Text="{Binding Libro.Titulo}"
+                    TextColor="White"
+                    TitleColor="White"
+                    WidthRequest="250" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="ISBN:"
+                    TextColor="White" />
+
+                <material:TextField
+                    Title="ISBN del libro"
+                    AccentColor="White"
+                    BorderColor="Beige"
+                    FontSize="16"
+                    Text="{Binding Libro.Isbn}"
+                    TextColor="White"
+                    TitleColor="White"
+                    WidthRequest="250" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="EDITORIAL:"
+                    TextColor="White" />
+
+                <material:TextField
+                    Title="Editorial del libro"
+                    AccentColor="White"
+                    BorderColor="Beige"
+                    FontSize="16"
+                    Text="{Binding Libro.Editorial}"
+                    TextColor="White"
+                    TitleColor="White"
+                    WidthRequest="250" />
+            </VerticalStackLayout>
+
+            <!--  Formulario a la derecha  -->
+            <VerticalStackLayout
+                Margin="0,35,0,0"
+                Spacing="20"
+                WidthRequest="300">
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="CURSO:"
+                    TextColor="White" />
+
+                <Picker
+                    x:Name="picker_cursos"
+                    Title="Seleccione un curso"
+                    ItemDisplayBinding="{Binding Curso}"
+                    ItemsSource="{Binding ListaCursos}"
+                    SelectedItem="{Binding SelectedCurso, Mode=TwoWay}"
+                    TitleColor="White"
+                    WidthRequest="250" />
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="ASIGNATRURA:"
+                    TextColor="White" />
+
+                <Picker
+                    x:Name="picker_asignaturas"
+                    Title="Seleccione una asignatura"
+                    IsEnabled="{Binding SelectedCurso, Converter={StaticResource SelectedCursoConverter}}"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    ItemsSource="{Binding ListaAsignaturas}"
+                    SelectedItem="{Binding SelectedAsignatura}"
+                    TitleColor="White"
+                    WidthRequest="250">
+
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            BindingContext="{Binding Source={x:Reference picker_asignaturas}, Path=BindingContext}"
+                            Command="{Binding ObtenerAsignaturasCommand}"
+                            EventName="Focused" />
+                    </Picker.Behaviors>
+
+                </Picker>
+
+                <!--  Stepper de cantidad  -->
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        Text="Cantidad:"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+
+                    <Stepper
+                        Increment="1"
+                        Maximum="200"
+                        Minimum="1"
+                        Value="{Binding Cantidad, Mode=TwoWay}" />
+
+                    <Entry Text="{Binding Cantidad, Mode=TwoWay}" WidthRequest="100">
+                        <Entry.Behaviors>
+                            <behavior:NumericValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
+
+                </StackLayout>
+
+                <HorizontalStackLayout>
+                    <Button
+                        Margin="20,0,0,0"
+                        BackgroundColor="LightSeaGreen"
+                        Command="{Binding CrearLibroCommand}"
+                        HeightRequest="50"
+                        Text="AÑADIR"
+                        WidthRequest="120" />
+
+                    <Button
+                        Margin="20,0,0,0"
+                        BackgroundColor="IndianRed"
+                        Command="{Binding LimpiarFormularioCommand}"
+                        HeightRequest="50"
+                        Text="LIMPIAR"
+                        WidthRequest="120" />
+                </HorizontalStackLayout>
+
+
+
+            </VerticalStackLayout>
+
+        </HorizontalStackLayout>
+
+
+    </Border>
+
+</ContentPage>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout
+    x:Class="prestamosLibrosTFG.Views.StacksLayouts.AsignaturasStack"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:prestamosLibrosTFG.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewmodels="clr-namespace:prestamosLibrosTFG.ViewModels"
+    x:Name="asignaturas_stack"
+    x:DataType="viewmodels:MainViewModel">
+
+    <StackLayout.Resources>
+        <ResourceDictionary>
+            <converter:AsignaturaColorConverter x:Key="AsignaturaColorConverter" />
+        </ResourceDictionary>
+    </StackLayout.Resources>
+
+    <VerticalStackLayout
+        Margin="270,100,0,0"
+        HeightRequest="700"
+        WidthRequest="500">
+
+        <Label
+            Margin="0,20,0,0"
+            FontAttributes="Bold"
+            FontSize="40"
+            HorizontalOptions="Center"
+            Text="ASIGNATURAS"
+            VerticalOptions="Center" />
+
+        <CollectionView
+            HeightRequest="400"
+            ItemsSource="{Binding ListaAsignaturas}"
+            SelectedItem="{Binding SelectedAsignatura}"
+            SelectionMode="Single"
+            WidthRequest="600">
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    HorizontalItemSpacing="20"
+                    Orientation="Vertical"
+                    Span="3"
+                    VerticalItemSpacing="20" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:AsignaturaModel">
+                    <Frame
+                        Margin="5"
+                        Padding="10"
+                        BackgroundColor="{Binding Nombre, Converter={StaticResource AsignaturaColorConverter}}"
+                        CornerRadius="10"
+                        HasShadow="True"
+                        HeightRequest="150"
+                        WidthRequest="150">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                x:DataType="viewmodels:MainViewModel"
+                                BindingContext="{Binding Source={x:Reference asignaturas_stack}, Path=BindingContext}"
+                                Command="{Binding ObtenerLibrosCommand}"
+                                NumberOfTapsRequired="2" />
+                        </Frame.GestureRecognizers>
+
+                        <VerticalStackLayout
+                            Margin="0"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                            <Label
+                                FontSize="20"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Nombre}"
+                                TextColor="Black" />
+                        </VerticalStackLayout>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+
+                                <VisualState Name="Normal" />
+
+                                <VisualState Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightGray" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightBlue" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button
+            Margin="10,10,0,0"
+            Command="{Binding VolverAtrasDesdeAsignaturasCommand}"
+            HorizontalOptions="Start"
+            Text="← Atrás" />
+    </VerticalStackLayout>
+</StackLayout>

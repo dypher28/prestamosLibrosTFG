@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout
+    x:Class="prestamosLibrosTFG.Views.StacksLayouts.LibrosStack"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:converters="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:prestamosLibrosTFG.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewmodels="clr-namespace:prestamosLibrosTFG.ViewModels"
+    x:Name="libros_stack"
+    x:DataType="viewmodels:MainViewModel">
+
+
+    <VerticalStackLayout
+        Margin="250,0,0,0"
+        HeightRequest="700"
+        WidthRequest="500">
+
+
+        <Label
+            Margin="0,20,0,20"
+            FontAttributes="Bold"
+            FontSize="36"
+            HorizontalOptions="Center"
+            Text="LIBROS"
+            VerticalOptions="Center" />
+
+
+        <CollectionView
+            HeightRequest="500"
+            HorizontalOptions="Center"
+            ItemsSource="{Binding ListaLibros}"
+            SelectionMode="Single"
+            VerticalOptions="Start"
+            WidthRequest="700">
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    HorizontalItemSpacing="20"
+                    Orientation="Vertical"
+                    Span="3"
+                    VerticalItemSpacing="20" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:LibroModel">
+                    <Frame
+                        Margin="10"
+                        Padding="15"
+                        BackgroundColor="White"
+                        CornerRadius="15"
+                        HasShadow="True"
+                        HeightRequest="280"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Start"
+                        WidthRequest="160">
+                        <VerticalStackLayout
+                            HorizontalOptions="Center"
+                            Spacing="10"
+                            VerticalOptions="Center">
+
+                            <ffimage:CachedImage
+                                Aspect="AspectFill"
+                                HeightRequest="150"
+                                Source="{Binding ImageSource}"
+                                WidthRequest="120" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Titulo}"
+                                TextColor="Black" />
+
+                            <Label
+                                FontSize="14"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Editorial}"
+                                TextColor="Gray" />
+
+                            <Label
+                                FontSize="14"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Isbn}"
+                                TextColor="Gray" />
+
+                        </VerticalStackLayout>
+
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualState Name="Normal" />
+                                <VisualState Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightGray" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightBlue" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+        <Button
+            Margin="10,20,0,0"
+            BackgroundColor="LightGray"
+            BorderColor="Gray"
+            Command="{Binding VolverAtrasDesdeLibrosCommand}"
+            FontSize="16"
+            HorizontalOptions="Start"
+            Text="← Atrás"
+            TextColor="Black" />
+    </VerticalStackLayout>
+</StackLayout>

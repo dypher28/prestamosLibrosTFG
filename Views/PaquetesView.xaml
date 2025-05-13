@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="prestamosLibrosTFG.Views.PaquetesView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behavior="clr-namespace:prestamosLibrosTFG.Behaviors"
+    xmlns:converters="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:prestamosLibrosTFG.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewmodels="clr-namespace:prestamosLibrosTFG.ViewModels"
+    x:Name="paquetes_view"
+    x:DataType="viewmodels:PaqueteViewModel"
+    BindingContext="{viewmodels:PaqueteViewModel}">
+
+    <VerticalStackLayout Padding="20" Spacing="20">
+
+        <Entry Placeholder="Nombre del paquete" />
+
+        <Label FontAttributes="Bold" Text="Selecciona los libros para el paquete:" />
+
+        <CollectionView
+            x:Name="LibrosCollectionView"
+            HeightRequest="300"
+            ItemsSource="{Binding ListaLibros}"
+            SelectedItems="{Binding LibrosSeleccionados}"
+            SelectionMode="Multiple">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame
+                        Margin="5"
+                        Padding="10"
+                        BorderColor="Gray"
+                        CornerRadius="10">
+                        <StackLayout>
+
+                            <Label
+                                FontAttributes="Bold"
+                                Text="{Binding Libro.Titulo}"
+                                TextColor="Black" />
+                            <Label
+                                FontAttributes="Bold"
+                                Text="{Binding Libro.Isbn}"
+                                TextColor="Black" />
+                            <Label
+                                FontSize="12"
+                                Text="{Binding Libro.Editorial}"
+                                TextColor="Black" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button
+            BackgroundColor="DarkBlue"
+            CornerRadius="10"
+            HeightRequest="50"
+            Text="Crear Paquete"
+            TextColor="White"
+            WidthRequest="200" />
+    </VerticalStackLayout>
+</ContentPage>

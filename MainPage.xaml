@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="prestamosLibrosTFG.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:prestamosLibrosTFG.Models"
+    xmlns:stacks="clr-namespace:prestamosLibrosTFG.Views.StacksLayouts"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewmodels="clr-namespace:prestamosLibrosTFG.ViewModels"
+    x:Name="main_page"
+    x:DataType="viewmodels:MainViewModel"
+    BindingContext="{viewmodels:MainViewModel}">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding ObtenerCursosCommand}" EventName="Loaded" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout>
+
+        <!--  CONTENEDOR HORIZONTAL DEL TITULO  -->
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Image
+                IsAnimationPlaying="True"
+                Source="user_hello.gif"
+                WidthRequest="100" />
+
+        </HorizontalStackLayout>
+
+        <!--  CONTENEDOR HORIZONTAL DE LAS COLUMNAS  -->
+        <HorizontalStackLayout>
+
+            <stacks:CursosStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsCursosVisible}" />
+            <stacks:AsignaturasStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsAsignaturasVisible}" />
+            <stacks:LibrosStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsLibrosVisible}" />
+        </HorizontalStackLayout>
+
+
+    </VerticalStackLayout>
+
+
+</ContentPage>
