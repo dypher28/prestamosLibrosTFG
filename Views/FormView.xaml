@@ -24,7 +24,8 @@
         BackgroundColor="SlateGray"
         HeightRequest="500"
         StrokeShape="RoundRectangle 20"
-        StrokeThickness="0">
+        StrokeThickness="0"
+        WidthRequest="1000">
 
         <Border.Shadow>
             <Shadow
@@ -100,15 +101,17 @@
                     Text="ISBN:"
                     TextColor="White" />
 
-                <material:TextField
-                    Title="ISBN del libro"
-                    AccentColor="White"
-                    BorderColor="Beige"
+                <Entry
                     FontSize="16"
+                    Placeholder="ISBN del libro"
+                    PlaceholderColor="White"
                     Text="{Binding Libro.Isbn}"
                     TextColor="White"
-                    TitleColor="White"
-                    WidthRequest="250" />
+                    WidthRequest="250">
+                    <Entry.Behaviors>
+                        <behavior:NumericValidationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
 
                 <Label
                     FontAttributes="Bold"
@@ -146,7 +149,14 @@
                     ItemsSource="{Binding ListaCursos}"
                     SelectedItem="{Binding SelectedCurso, Mode=TwoWay}"
                     TitleColor="White"
-                    WidthRequest="250" />
+                    WidthRequest="250">
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            BindingContext="{Binding Source={x:Reference picker_cursos}, Path=BindingContext}"
+                            Command="{Binding ObtenerAsignaturasCommand}"
+                            EventName="SelectedIndexChanged" />
+                    </Picker.Behaviors>
+                </Picker>
 
                 <Label
                     FontAttributes="Bold"
@@ -162,16 +172,7 @@
                     ItemsSource="{Binding ListaAsignaturas}"
                     SelectedItem="{Binding SelectedAsignatura}"
                     TitleColor="White"
-                    WidthRequest="250">
-
-                    <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            BindingContext="{Binding Source={x:Reference picker_asignaturas}, Path=BindingContext}"
-                            Command="{Binding ObtenerAsignaturasCommand}"
-                            EventName="Focused" />
-                    </Picker.Behaviors>
-
-                </Picker>
+                    WidthRequest="250" />
 
                 <!--  Stepper de cantidad  -->
                 <StackLayout Orientation="Horizontal" Spacing="10">

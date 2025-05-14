@@ -21,10 +21,7 @@
         </ResourceDictionary>
     </StackLayout.Resources>
 
-    <VerticalStackLayout
-        Margin="270,100,0,0"
-        HeightRequest="700"
-        WidthRequest="500">
+    <VerticalStackLayout>
 
         <Label
             Margin="0,20,0,0"

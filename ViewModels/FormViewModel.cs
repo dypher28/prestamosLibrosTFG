@@ -278,8 +278,6 @@ namespace prestamosLibrosTFG.ViewModels
                 }
             };
 
-            //Libro = new LibroModel();
-
             SelectedCurso = null;
             SelectedAsignatura = null;
             Cantidad = "1";

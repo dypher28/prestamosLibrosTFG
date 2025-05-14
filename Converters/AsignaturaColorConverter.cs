@@ -16,7 +16,7 @@ namespace prestamosLibrosTFG.Converters
             return nombreAsignatura switch
             {
                 string s when s.Contains("Matemáticas") => Colors.LightBlue,
-                string s when s.Contains("Lengua") => Colors.LightPink,
+                string s when s.Contains("Lengua Castellana") => Colors.LightPink,
                 string s when s.Contains("Ciencias Sociales") => Colors.BurlyWood,
                 string s when s.Contains("Ciencias Naturales") => Colors.LightGreen,
                 string s when s.Contains("Conocimiento del medio") => Colors.LightGreen,

@@ -16,51 +16,174 @@
     x:DataType="viewmodels:PaqueteViewModel"
     BindingContext="{viewmodels:PaqueteViewModel}">
 
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SelectedCursoConverter x:Key="SelectedCursoConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <VerticalStackLayout Padding="20" Spacing="20">
 
-        <Entry Placeholder="Nombre del paquete" />
+        <Label
+            FontAttributes="Bold"
+            FontSize="40"
+            HorizontalOptions="Center"
+            Text="CREAR PAQUETE" />
 
-        <Label FontAttributes="Bold" Text="Selecciona los libros para el paquete:" />
-
-        <CollectionView
-            x:Name="LibrosCollectionView"
-            HeightRequest="300"
-            ItemsSource="{Binding ListaLibros}"
-            SelectedItems="{Binding LibrosSeleccionados}"
-            SelectionMode="Multiple">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame
-                        Margin="5"
-                        Padding="10"
-                        BorderColor="Gray"
-                        CornerRadius="10">
-                        <StackLayout>
-
-                            <Label
-                                FontAttributes="Bold"
-                                Text="{Binding Libro.Titulo}"
-                                TextColor="Black" />
-                            <Label
-                                FontAttributes="Bold"
-                                Text="{Binding Libro.Isbn}"
-                                TextColor="Black" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding Libro.Editorial}"
-                                TextColor="Black" />
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <Button
-            BackgroundColor="DarkBlue"
-            CornerRadius="10"
-            HeightRequest="50"
-            Text="Crear Paquete"
+        <material:TextField
+            Title="Nombre del paquete"
+            Margin="0,30,0,0"
+            AccentColor="White"
+            BorderColor="Beige"
+            FontSize="16"
             TextColor="White"
-            WidthRequest="200" />
+            TitleColor="White"
+            WidthRequest="250" />
+
+        <Label
+            Margin="70,0,0,0"
+            FontAttributes="Bold"
+            Text="Selecciona los libros para el paquete:" />
+
+        <HorizontalStackLayout>
+            <!--  CollectionView de los libros  -->
+            <CollectionView
+                x:Name="LibrosCollectionView"
+                Margin="60,0,0,0"
+                HeightRequest="750"
+                ItemsSource="{Binding ListaLibrosFiltrada}"
+                SelectedItems="{Binding LibrosSeleccionados}"
+                SelectionMode="Multiple"
+                WidthRequest="700">
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="4" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:LibroModel">
+                        <Frame
+                            Margin="5"
+                            Padding="10"
+                            BackgroundColor="White"
+                            BorderColor="Gray"
+                            CornerRadius="10"
+                            HeightRequest="230"
+                            WidthRequest="150">
+                            <StackLayout>
+                                <ffimage:CachedImage
+                                    Aspect="AspectFill"
+                                    HeightRequest="150"
+                                    Source="{Binding ImageSource}"
+                                    WidthRequest="120" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Titulo}"
+                                    TextColor="Black" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Isbn}"
+                                    TextColor="Black" />
+                                <Label
+                                    FontSize="12"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Editorial}"
+                                    TextColor="Black" />
+                            </StackLayout>
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <!--  sin selección  -->
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="White" />
+                                            <Setter Property="BorderColor" Value="Gray" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+
+                                    <!--  seleccionado  -->
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#D1E7DD" />
+                                            <Setter Property="BorderColor" Value="Green" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Frame>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+            <!--  Stack de los filtros  -->
+            <VerticalStackLayout Margin="80,0,0,0">
+                <Label
+                    Margin="40,0,0,20"
+                    FontSize="30"
+                    Text="Buscar libros" />
+
+                <Entry Placeholder="ISBN del libro" Text="{Binding Libro.Isbn, Mode=TwoWay}">
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior Command="{Binding FiltrarLibrosCommand}" EventName="TextChanged" />
+                        <behavior:NumericValidationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+
+                <Picker
+                    x:Name="picker_cursos"
+                    Title="Seleccione un curso"
+                    Margin="0,20,0,20"
+                    HeightRequest="70"
+                    ItemDisplayBinding="{Binding Curso}"
+                    ItemsSource="{Binding ListaCursos}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedCurso, Mode=TwoWay}"
+                    TitleColor="White"
+                    WidthRequest="250">
+
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            BindingContext="{Binding Source={x:Reference picker_cursos}, Path=BindingContext}"
+                            Command="{Binding ObtenerAsignaturasCommand}"
+                            EventName="SelectedIndexChanged" />
+                    </Picker.Behaviors>
+
+                </Picker>
+
+                <Picker
+                    x:Name="picker_asignaturas"
+                    Title="Seleccione una asignatura"
+                    HeightRequest="70"
+                    IsEnabled="{Binding SelectedCurso, Converter={StaticResource SelectedCursoConverter}}"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    ItemsSource="{Binding ListaAsignaturas}"
+                    SelectedItem="{Binding SelectedAsignatura}"
+                    TitleColor="White"
+                    WidthRequest="250" />
+
+                <Button
+                    Margin="0,50,0,0"
+                    BackgroundColor="IndianRed"
+                    Command="{Binding LimpiarCommand}"
+                    HeightRequest="50"
+                    Text="LIMPIAR FILTROS"
+                    WidthRequest="150" />
+
+                <Button
+                    Margin="0,50,0,0"
+                    BackgroundColor="DarkBlue"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Text="Crear Paquete"
+                    TextColor="White"
+                    WidthRequest="200" />
+
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 </ContentPage>

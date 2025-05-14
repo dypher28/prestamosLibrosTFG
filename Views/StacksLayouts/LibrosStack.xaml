@@ -16,12 +16,7 @@
     x:DataType="viewmodels:MainViewModel">
 
 
-    <VerticalStackLayout
-        Margin="250,0,0,0"
-        HeightRequest="700"
-        WidthRequest="500">
-
-
+    <VerticalStackLayout>
         <Label
             Margin="0,20,0,20"
             FontAttributes="Bold"
@@ -36,14 +31,13 @@
             HorizontalOptions="Center"
             ItemsSource="{Binding ListaLibros}"
             SelectionMode="Single"
-            VerticalOptions="Start"
-            WidthRequest="700">
+            VerticalOptions="Start">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
                     HorizontalItemSpacing="20"
                     Orientation="Vertical"
-                    Span="3"
+                    Span="4"
                     VerticalItemSpacing="20" />
             </CollectionView.ItemsLayout>
 

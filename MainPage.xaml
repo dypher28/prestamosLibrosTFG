@@ -27,7 +27,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <VerticalStackLayout>
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
 
         <!--  CONTENEDOR HORIZONTAL DEL TITULO  -->
         <HorizontalStackLayout HorizontalOptions="Center">
@@ -40,7 +40,6 @@
 
         <!--  CONTENEDOR HORIZONTAL DE LAS COLUMNAS  -->
         <HorizontalStackLayout>
-
             <stacks:CursosStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsCursosVisible}" />
             <stacks:AsignaturasStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsAsignaturasVisible}" />
             <stacks:LibrosStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsLibrosVisible}" />
