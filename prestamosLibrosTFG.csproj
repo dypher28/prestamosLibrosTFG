@@ -85,6 +85,9 @@
 	  <MauiXaml Update="Views\PaquetesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\SalidaView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\StacksLayouts\AsignaturasStack.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

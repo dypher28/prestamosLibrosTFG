@@ -20,7 +20,16 @@ namespace prestamosLibrosTFG.ViewModels
         private bool isCursoChecked = false;
 
         [ObservableProperty]
-        private ObservableCollection<CursoModel> listaCursos;
+        private ObservableCollection<CursoModel> listaCursos; // Lista del picker para los filtros
+
+        [ObservableProperty]
+        private ObservableCollection<CursoModel> listaCursosPaquete; // Lista del picker para crear el paquete
+
+        [ObservableProperty]
+        private CursoModel selectedCursoPaquete; // SelectedLibro para crear el paquete
+
+        [ObservableProperty]
+        private PaqueteModel paquete;
 
         [ObservableProperty]
         private ObservableCollection<LibroModel> listaLibros;
@@ -29,27 +38,28 @@ namespace prestamosLibrosTFG.ViewModels
         private ObservableCollection<AsignaturaModel> listaAsignaturas;
 
         [ObservableProperty]
-        private CursoModel selectedCurso;
-
-        [ObservableProperty]
-        private LibroModel selectedLibro;
+        private CursoModel selectedCurso; // SelectedLibro para los filtros
 
         [ObservableProperty]
         private AsignaturaModel selectedAsignatura;
 
         [ObservableProperty]
-        private LibroModel libro = new LibroModel();
+        private LibroModel libro = new();
 
         [ObservableProperty]
-        public ObservableCollection<object> librosSeleccionados;
+        private ObservableCollection<object> librosSeleccionados;
 
         [ObservableProperty]
         private ObservableCollection<LibroModel> listaLibrosFiltrada;
 
         public PaqueteViewModel()
         {
+            Paquete = new PaqueteModel();
+            OnPropertyChanged(nameof(Paquete));
+            LibrosSeleccionados = new ObservableCollection<object>();
             ObtenerLibros();
             ObtenerCursos();
+            ObtenerCursosPaquete();
 
         }
 
@@ -82,33 +92,33 @@ namespace prestamosLibrosTFG.ViewModels
             }
         }
 
-        //private async void ObtenerLibros()  // Metodo para obtener todos los libros
-        //{
-        //    RequestModel request = new RequestModel()
-        //    {
-        //        Method = "GET",
-        //        Data = string.Empty,
-        //        Route = "http://localhost:8080/libros/obtenerLibros"
-        //    };
+        [RelayCommand] // Metodo para obtener los cursos del picker de crear paquete
+        public async Task ObtenerCursosPaquete()
+        {
+            RequestModel request = new RequestModel()
+            {
+                Method = "GET",
+                Data = string.Empty,
+                Route = "http://localhost:8080/cursos/obtenerCursos"
+            };
 
-        //    ResponseModel response = await APIService.ExecuteRequest(request);
-        //    if (response.Success.Equals(0))
-        //    {
-        //        try
-        //        {
-        //            ListaLibros =
-        //                JsonConvert.DeserializeObject<ObservableCollection<LibroModel>>(response.Data.ToString());
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            if (response.Success.Equals(0))
+            {
+                try
+                {
+                    ListaCursosPaquete =
+                        JsonConvert.DeserializeObject<ObservableCollection<CursoModel>>(response.Data.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write(ex.StackTrace);
+                    Debug.Write(ex.ToString);
+                    Debug.Write(ex.Message);
 
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Debug.Write(ex.StackTrace);
-        //            Debug.Write(ex.ToString);
-        //            Debug.Write(ex.Message);
-
-        //        }
-        //    }
-        //}
+                }
+            }
+        }
 
         private async void ObtenerLibros()
         {
@@ -139,8 +149,6 @@ namespace prestamosLibrosTFG.ViewModels
                 }
             }
         }
-
-
 
         [RelayCommand] // Metodo para obtener todas las asignaturas de un curso
         public async Task ObtenerAsignaturas()
@@ -174,6 +182,7 @@ namespace prestamosLibrosTFG.ViewModels
             }
         }
 
+        // Metodos para filtrar en tiempo real
         partial void OnLibroChanged(LibroModel value)
         {
             FiltrarLibros();
@@ -225,8 +234,6 @@ namespace prestamosLibrosTFG.ViewModels
 
             SelectedCurso = null;
             SelectedAsignatura = null;
-
-            //OnPropertyChanged(nameof(Libro));
         }
 
         [RelayCommand] // Comando para llamar en el boton de limpiar
@@ -235,8 +242,72 @@ namespace prestamosLibrosTFG.ViewModels
             LimpiarCampos();
         }
 
+        private async Task MostrarMensaje(string mensaje)
+        {
+            await App.Current.MainPage.DisplayAlert("Aviso", mensaje, "OK");
+        }
+
+
+        [RelayCommand]
+        public async void CrearPaquete()
+        {
+            if (string.IsNullOrWhiteSpace(Paquete?.Nombre))
+            {
+                await MostrarMensaje("Debes ingresar un nombre para el paquete.");
+                return;
+            }
+
+            if (SelectedCursoPaquete == null)
+            {
+                await MostrarMensaje("Debes seleccionar un curso.");
+                return;
+            }
+
+            if (LibrosSeleccionados == null || LibrosSeleccionados.Count == 0)
+            {
+                await MostrarMensaje("Debes seleccionar al menos un libro.");
+                return;
+            }
+
+            //// Asignar el curso desde el modelo de selección
+            //Paquete.Curso = new Curso
+            //{
+            //    Id = SelectedCursoPaquete.IdCurso,
+            //    Nombre = SelectedCursoPaquete.Curso
+            //};
+
+            //// Asignar los libros seleccionados al paquete
+            //Paquete.Libros = LibrosSeleccionados
+            //    .Select(libro => new LibroInfo
+            //    {
+            //        Id = libro.Id,
+            //        Titulo = libro.Titulo
+            //    }).ToHashSet();
+
+
+            // Crear y enviar la solicitud
+            var request = new RequestModel
+            {
+                Method = "POST",
+                Route = "http://localhost:8080/paquetes/crearPaquete",
+                Data = Paquete
+            };
+
+            var response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+                await MostrarMensaje("Paquete creado correctamente.");
+
+                // Limpiar campos
+                Paquete = new PaqueteModel();
+                SelectedCursoPaquete = null;
+                LibrosSeleccionados.Clear();
+            }
+            else
+            {
+                await MostrarMensaje("Error al crear el paquete. Inténtalo de nuevo.");
+            }
+        }
 
     }
-
-
 }

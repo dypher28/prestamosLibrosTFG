@@ -29,4 +29,8 @@
         <ShellContent ContentTemplate="{DataTemplate views:PaquetesView}" Route="PaquetesView" />
     </FlyoutItem>
 
+    <FlyoutItem Title="SALIR">
+        <ShellContent ContentTemplate="{DataTemplate views:SalidaView}" Route="SalidaView" />
+    </FlyoutItem>
+
 </Shell>

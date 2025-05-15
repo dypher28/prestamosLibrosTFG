@@ -113,6 +113,10 @@ namespace prestamosLibrosTFG.ViewModels
         [RelayCommand] // Metodo para obtener todas las asignaturas de un curso
         public async Task ObtenerAsignaturas()
         {
+            if(SelectedCurso == null)
+            {
+                return;
+            }
             RequestModel request = new RequestModel()
             {
                 Method = "GET",

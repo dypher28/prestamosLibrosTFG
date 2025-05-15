@@ -21,7 +21,7 @@ namespace prestamosLibrosTFG.ViewModels
         private ObservableCollection<CursoModel> listaCursos;
 
         [ObservableProperty]
-        private ObservableCollection<LibroModel> listaLibros;
+        private ObservableCollection<LibroModel> listaLibros = new ObservableCollection<LibroModel>();
 
         [ObservableProperty]
         private ObservableCollection<AsignaturaModel> listaAsignaturas;
@@ -116,7 +116,7 @@ namespace prestamosLibrosTFG.ViewModels
 
 
         [RelayCommand]
-        public async Task ObtenerLibros()
+        public async void ObtenerLibros()
         {
             RequestModel request = new RequestModel()
             {
@@ -134,7 +134,8 @@ namespace prestamosLibrosTFG.ViewModels
 
                     if (libros != null && libros.Count > 0)
                     {
-                        ListaLibros = libros;
+                        ListaLibros = new ObservableCollection<LibroModel>(libros);
+                       // ListaLibros = libros;
                         IsCursosVisible = false;
                         IsAsignaturasVisible = false;
                         IsLibrosVisible = true;

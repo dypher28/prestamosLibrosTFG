@@ -16,13 +16,13 @@ namespace prestamosLibrosTFG.Models
         public int? Id { get; set; }
 
         [JsonProperty("titulo")]
-        public string Titulo { get; set; }
+        public string? Titulo { get; set; }
 
         [JsonProperty("editorial")]
-        public string Editorial { get; set; }
+        public string? Editorial { get; set; }
 
         [JsonProperty("isbn")]
-        public string Isbn { get; set; }
+        public string? Isbn { get; set; }
 
         [JsonProperty("cantidad")]
         public int? Cantidad { get; set; }

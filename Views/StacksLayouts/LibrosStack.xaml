@@ -35,10 +35,10 @@
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
-                    HorizontalItemSpacing="20"
+                    HorizontalItemSpacing="5"
                     Orientation="Vertical"
-                    Span="4"
-                    VerticalItemSpacing="20" />
+                    Span="1"
+                    VerticalItemSpacing="5" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>

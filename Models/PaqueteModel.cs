@@ -21,7 +21,7 @@ namespace prestamosLibrosTFG.Models
         public Curso Curso { get; set; }
 
         [JsonProperty("libros")]
-        public HashSet<Libro> Libros { get; set; } = new HashSet<Libro>();
+        public HashSet<LibroInfo> Libros { get; set; } = new HashSet<LibroInfo>();
 
         [JsonProperty("prestamos")]
         public HashSet<Prestamo> Prestamos { get; set; } = new HashSet<Prestamo>();
@@ -42,11 +42,11 @@ namespace prestamosLibrosTFG.Models
         [JsonProperty("id_curso")]
         public int Id { get; set; }
 
-        [JsonProperty("nombre")]
+        [JsonProperty("curso")]
         public string Nombre { get; set; }
     }
 
-    public class Libro
+    public class LibroInfo
     {
         [JsonProperty("id_libro")]
         public int Id { get; set; }

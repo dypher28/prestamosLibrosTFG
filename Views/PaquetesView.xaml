@@ -30,20 +30,37 @@
             HorizontalOptions="Center"
             Text="CREAR PAQUETE" />
 
-        <material:TextField
-            Title="Nombre del paquete"
-            Margin="0,30,0,0"
-            AccentColor="White"
-            BorderColor="Beige"
-            FontSize="16"
-            TextColor="White"
-            TitleColor="White"
-            WidthRequest="250" />
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <material:TextField
+                Title="Nombre del paquete"
+                Margin="0,30,0,0"
+                AccentColor="White"
+                BorderColor="Beige"
+                FontSize="16"
+                Text="{Binding Paquete.Nombre}"
+                TextColor="White"
+                TitleColor="White"
+                WidthRequest="250" />
+
+            <Picker
+                Title="Seleccione el curso del paquete"
+                Margin="30,20,0,0"
+                HeightRequest="70"
+                ItemDisplayBinding="{Binding Curso}"
+                ItemsSource="{Binding ListaCursosPaquete}"
+                SelectedItem="{Binding SelectedCursoPaquete, Mode=TwoWay}"
+                TitleColor="White"
+                WidthRequest="250" />
+
+
+        </HorizontalStackLayout>
 
         <Label
             Margin="70,0,0,0"
             FontAttributes="Bold"
             Text="Selecciona los libros para el paquete:" />
+
+        <Label Text="{Binding LibrosSeleccionados.Count}" />
 
         <HorizontalStackLayout>
             <!--  CollectionView de los libros  -->
@@ -52,7 +69,7 @@
                 Margin="60,0,0,0"
                 HeightRequest="750"
                 ItemsSource="{Binding ListaLibrosFiltrada}"
-                SelectedItems="{Binding LibrosSeleccionados}"
+                SelectedItems="{Binding LibrosSeleccionados, Mode=TwoWay}"
                 SelectionMode="Multiple"
                 WidthRequest="700">
 
@@ -78,6 +95,7 @@
                                     WidthRequest="120" />
                                 <Label
                                     FontAttributes="Bold"
+                                    FontSize="18"
                                     HorizontalOptions="Center"
                                     Text="{Binding Titulo}"
                                     TextColor="Black" />
@@ -176,11 +194,13 @@
                 <Button
                     Margin="0,50,0,0"
                     BackgroundColor="DarkBlue"
+                    Command="{Binding CrearPaqueteCommand}"
                     CornerRadius="10"
                     HeightRequest="50"
                     Text="Crear Paquete"
                     TextColor="White"
                     WidthRequest="200" />
+
 
             </VerticalStackLayout>
         </HorizontalStackLayout>
