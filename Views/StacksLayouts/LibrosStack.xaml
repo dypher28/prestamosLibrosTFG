@@ -20,7 +20,8 @@
         <Label
             Margin="0,20,0,20"
             FontAttributes="Bold"
-            FontSize="36"
+            FontFamily="okemo"
+            FontSize="50"
             HorizontalOptions="Center"
             Text="LIBROS"
             VerticalOptions="Center" />
@@ -28,18 +29,19 @@
 
         <CollectionView
             HeightRequest="500"
-            HorizontalOptions="Center"
+            HorizontalOptions="Fill"
             ItemsSource="{Binding ListaLibros}"
             SelectionMode="Single"
-            VerticalOptions="Start">
-
+            VerticalOptions="Start"
+            WidthRequest="900">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
                     HorizontalItemSpacing="5"
                     Orientation="Vertical"
-                    Span="1"
-                    VerticalItemSpacing="5" />
+                    Span="4"
+                    VerticalItemSpacing="10" />
             </CollectionView.ItemsLayout>
+
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:LibroModel">
@@ -50,12 +52,11 @@
                         CornerRadius="15"
                         HasShadow="True"
                         HeightRequest="280"
-                        HorizontalOptions="Center"
                         VerticalOptions="Start"
-                        WidthRequest="160">
+                        WidthRequest="150">
                         <VerticalStackLayout
                             HorizontalOptions="Center"
-                            Spacing="10"
+                            Spacing="5"
                             VerticalOptions="Center">
 
                             <ffimage:CachedImage
@@ -74,13 +75,19 @@
                             <Label
                                 FontSize="14"
                                 HorizontalTextAlignment="Center"
+                                Text="{Binding Isbn}"
+                                TextColor="Gray" />
+
+                            <Label
+                                FontSize="14"
+                                HorizontalTextAlignment="Center"
                                 Text="{Binding Editorial}"
                                 TextColor="Gray" />
 
                             <Label
                                 FontSize="14"
                                 HorizontalTextAlignment="Center"
-                                Text="{Binding Isbn}"
+                                Text="{Binding Cantidad}"
                                 TextColor="Gray" />
 
                         </VerticalStackLayout>
@@ -108,14 +115,15 @@
         </CollectionView>
 
 
-        <Button
+        <ImageButton
             Margin="10,20,0,0"
-            BackgroundColor="LightGray"
-            BorderColor="Gray"
+            BackgroundColor="Transparent"
+            BorderColor="Transparent"
             Command="{Binding VolverAtrasDesdeLibrosCommand}"
-            FontSize="16"
+            HeightRequest="120"
             HorizontalOptions="Start"
-            Text="← Atrás"
-            TextColor="Black" />
+            Source="atras.png"
+            Style="{StaticResource EstiloBotonAtras}"
+            WidthRequest="100" />
     </VerticalStackLayout>
 </StackLayout>

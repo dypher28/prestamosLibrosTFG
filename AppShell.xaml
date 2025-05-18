@@ -10,9 +10,9 @@
 
     <Shell.FlyoutHeader>
         <Image
-            Margin="20,20,20,20"
-            Source="icono.png"
-            WidthRequest="80" />
+            Margin="20,20,20,0"
+            Source="logobookit.png"
+            WidthRequest="200" />
     </Shell.FlyoutHeader>
 
     <FlyoutItem Title="INICIO">
@@ -23,10 +23,12 @@
         <ShellContent ContentTemplate="{DataTemplate views:FormView}" Route="FormView" />
     </FlyoutItem>
 
-    <FlyoutItem Title="ALUMNOS" />
-
     <FlyoutItem Title="PAQUETES">
         <ShellContent ContentTemplate="{DataTemplate views:PaquetesView}" Route="PaquetesView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="ASIGNAR PAQUETE">
+        <ShellContent ContentTemplate="{DataTemplate views:PrestamosView}" Route="PrestamosView" />
     </FlyoutItem>
 
     <FlyoutItem Title="SALIR">

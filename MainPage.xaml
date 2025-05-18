@@ -27,16 +27,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-
-        <!--  CONTENEDOR HORIZONTAL DEL TITULO  -->
-        <HorizontalStackLayout HorizontalOptions="Center">
-            <Image
-                IsAnimationPlaying="True"
-                Source="user_hello.gif"
-                WidthRequest="100" />
-
-        </HorizontalStackLayout>
+    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
 
         <!--  CONTENEDOR HORIZONTAL DE LAS COLUMNAS  -->
         <HorizontalStackLayout>
@@ -45,8 +36,7 @@
             <stacks:LibrosStack BindingContext="{Binding Source={x:Reference main_page}, Path=BindingContext}" IsVisible="{Binding IsLibrosVisible}" />
         </HorizontalStackLayout>
 
-
-    </VerticalStackLayout>
+    </HorizontalStackLayout>
 
 
 </ContentPage>

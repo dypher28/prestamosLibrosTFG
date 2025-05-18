@@ -14,6 +14,7 @@
         Spacing="25"
         VerticalOptions="Center">
         <Label
+            FontFamily="lemon"
             FontSize="20"
             HorizontalOptions="Center"
             HorizontalTextAlignment="Center"
@@ -23,14 +24,22 @@
             <Button
                 BackgroundColor="Red"
                 Command="{Binding SalirCommand}"
+                FontFamily="lemon"
+                HeightRequest="50"
+                Style="{StaticResource EstiloBotonLimpiar}"
                 Text="Salir"
-                TextColor="White" />
+                TextColor="White"
+                WidthRequest="100" />
 
             <Button
                 BackgroundColor="Gray"
                 Command="{Binding CancelarCommand}"
+                FontFamily="lemon"
+                HeightRequest="50"
+                Style="{StaticResource EstiloBotonCancelar}"
                 Text="Cancelar"
-                TextColor="White" />
+                TextColor="White"
+                WidthRequest="100" />
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

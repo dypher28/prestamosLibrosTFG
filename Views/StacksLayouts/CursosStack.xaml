@@ -19,21 +19,22 @@
         <Label
             Margin="0,20,0,0"
             FontAttributes="Bold"
-            FontSize="40"
+            FontFamily="okemo"
+            FontSize="50"
             HorizontalOptions="Center"
             Text="CURSOS"
             VerticalOptions="Center" />
 
         <CollectionView
-            HeightRequest="550"
+            HeightRequest="500"
             ItemsSource="{Binding ListaCursos}"
             SelectedItem="{Binding SelectedCurso}"
             SelectionMode="Single"
-            WidthRequest="600">
+            WidthRequest="900">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
-                    HorizontalItemSpacing="20"
+                    HorizontalItemSpacing="0"
                     Orientation="Vertical"
                     Span="3"
                     VerticalItemSpacing="20" />
@@ -54,7 +55,7 @@
                                 x:DataType="viewmodels:MainViewModel"
                                 BindingContext="{Binding Source={x:Reference cursos_stack}, Path=BindingContext}"
                                 Command="{Binding ObtenerAsignaturasCommand}"
-                                NumberOfTapsRequired="2" />
+                                NumberOfTapsRequired="1" />
                         </Frame.GestureRecognizers>
 
                         <VerticalStackLayout
@@ -62,7 +63,8 @@
                             HorizontalOptions="Center"
                             VerticalOptions="Center">
                             <Label
-                                FontSize="20"
+                                FontFamily="Notted"
+                                FontSize="50"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Curso}"
                                 TextColor="Black" />

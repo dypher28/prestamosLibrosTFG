@@ -17,7 +17,15 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			}).UseMauiCommunityToolkit()
+                fonts.AddFont("KaolyDemo-Regular.ttf", "Kaoly");
+                fonts.AddFont("Minecraft.ttf", "Minecraft");
+                fonts.AddFont("LetterMagic.ttf", "Magic");
+                fonts.AddFont("Notted.ttf", "Notted");
+                fonts.AddFont("okemo.ttf", "okemo");
+                fonts.AddFont("StretchPro.ttf", "stretch");
+                fonts.AddFont("AkiraExpandedDemo.otf", "akira");
+                fonts.AddFont("LEMONMILK-Regular.otf", "lemon");
+            }).UseMauiCommunityToolkit()
 			.ConfigureMopups()
             .UseFFImageLoading()
             .UseUraniumUI()

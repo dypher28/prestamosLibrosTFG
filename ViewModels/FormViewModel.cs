@@ -230,29 +230,31 @@ namespace prestamosLibrosTFG.ViewModels
             Libro.Asignatura.Id = int.Parse(SelectedAsignatura.IdAsignatura);
             Libro.Cantidad = int.Parse(Cantidad);
 
-
-            var client = new HttpClient();
-            using var content = new MultipartFormDataContent();
-
-            // Verifica que haya una imagen seleccionada
-            if (string.IsNullOrEmpty(RutaImagen) || !File.Exists(RutaImagen))
+            // Si se seleccionó una imagen personalizada, subirla
+            if (!string.IsNullOrEmpty(RutaImagen) && File.Exists(RutaImagen) && !RutaImagen.Contains("librodefecto.png"))
             {
-                await MostrarMensaje("Debes seleccionar una imagen para el libro.");
-                return;
+                var client = new HttpClient();
+                using var content = new MultipartFormDataContent();
+
+                var imageContent = new StreamContent(new FileStream(RutaImagen, FileMode.Open, FileAccess.Read));
+                imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                content.Add(imageContent, "file", Path.GetFileName(RutaImagen));
+
+                var response_img = await client.PostAsync("http://localhost:8080/api/images", content);
+                response_img.EnsureSuccessStatusCode();
+                var id = await response_img.Content.ReadFromJsonAsync<int>();
+                Libro.Imagen.Id = id;
+                Libro.Imagen.FileName = Path.GetFileName(RutaImagen);
             }
-
-            var imageContent = new StreamContent(new FileStream(RutaImagen, FileMode.Open, FileAccess.Read));
-            imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-            content.Add(imageContent, "file", Path.GetFileName(rutaImagen));
-
-            var response_img = await client.PostAsync("http://localhost:8080/api/images", content);
-            response_img.EnsureSuccessStatusCode();
-            var id = await response_img.Content.ReadFromJsonAsync<int>();
-            Libro.Imagen.Id = id;
+            else
+            {
+                // No se seleccionó una imagen, usar imagen por defecto
+                Libro.Imagen = new LibroModel.ImageInfo();
+                Libro.Imagen.FileName = "librodefecto.png";
+            }
 
             var request = new RequestModel
             {
-
                 Method = "POST",
                 Route = "http://localhost:8080/libros/crearLibro",
                 Data = Libro
@@ -265,12 +267,12 @@ namespace prestamosLibrosTFG.ViewModels
                 await ObtenerLibros();
                 LimpiarCampos();
             }
-
             else
             {
-                await MostrarMensaje("Error al crear el libro. Intentalo de nuevo.");
+                await MostrarMensaje("Error al crear el libro. Inténtalo de nuevo.");
             }
         }
+
 
         private void LimpiarCampos() // Metodo para limpiar los campos del formulario
         {

@@ -17,6 +17,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:SelectedCursoConverter x:Key="SelectedCursoConverter" />
+            <converters:ImagenNulaAImagenPorDefectoConverter x:Key="ImagenPorDefecto" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <Border
@@ -58,7 +59,7 @@
                     <ffimage:CachedImage
                         ErrorPlaceholder="librodefecto.png"
                         HeightRequest="300"
-                        Source="{Binding Libro.Imagen.FileName}"
+                        Source="{Binding Libro.Imagen.FileName, Converter={StaticResource ImagenPorDefecto}}"
                         WidthRequest="200" />
 
                 </Border>
@@ -67,7 +68,9 @@
                     Margin="0,20,0,0"
                     BackgroundColor="RoyalBlue"
                     Command="{Binding SeleccionarImagenCommand}"
+                    FontFamily="lemon"
                     HeightRequest="50"
+                    Style="{StaticResource EstiloBotonSeleccionar}"
                     Text="SELECCIONAR"
                     WidthRequest="200" />
 
@@ -81,6 +84,7 @@
 
                 <Label
                     FontAttributes="Bold"
+                    FontFamily="lemon"
                     FontSize="20"
                     Text="TÍTULO:"
                     TextColor="White" />
@@ -97,6 +101,7 @@
 
                 <Label
                     FontAttributes="Bold"
+                    FontFamily="lemon"
                     FontSize="20"
                     Text="ISBN:"
                     TextColor="White" />
@@ -115,6 +120,7 @@
 
                 <Label
                     FontAttributes="Bold"
+                    FontFamily="lemon"
                     FontSize="20"
                     Text="EDITORIAL:"
                     TextColor="White" />
@@ -138,6 +144,7 @@
 
                 <Label
                     FontAttributes="Bold"
+                    FontFamily="lemon"
                     FontSize="20"
                     Text="CURSO:"
                     TextColor="White" />
@@ -160,6 +167,7 @@
 
                 <Label
                     FontAttributes="Bold"
+                    FontFamily="lemon"
                     FontSize="20"
                     Text="ASIGNATRURA:"
                     TextColor="White" />
@@ -178,6 +186,7 @@
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label
                         FontAttributes="Bold"
+                        FontFamily="lemon"
                         FontSize="20"
                         Text="Cantidad:"
                         TextColor="White"
@@ -203,7 +212,9 @@
                         Margin="20,0,0,0"
                         BackgroundColor="LightSeaGreen"
                         Command="{Binding CrearLibroCommand}"
+                        FontFamily="lemon"
                         HeightRequest="50"
+                        Style="{StaticResource EstiloBotonAnadir}"
                         Text="AÑADIR"
                         WidthRequest="120" />
 
@@ -211,7 +222,9 @@
                         Margin="20,0,0,0"
                         BackgroundColor="IndianRed"
                         Command="{Binding LimpiarFormularioCommand}"
+                        FontFamily="lemon"
                         HeightRequest="50"
+                        Style="{StaticResource EstiloBotonLimpiar}"
                         Text="LIMPIAR"
                         WidthRequest="120" />
                 </HorizontalStackLayout>

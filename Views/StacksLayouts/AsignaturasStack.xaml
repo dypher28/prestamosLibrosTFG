@@ -26,17 +26,18 @@
         <Label
             Margin="0,20,0,0"
             FontAttributes="Bold"
-            FontSize="40"
+            FontFamily="okemo"
+            FontSize="50"
             HorizontalOptions="Center"
             Text="ASIGNATURAS"
             VerticalOptions="Center" />
 
         <CollectionView
-            HeightRequest="400"
+            HeightRequest="500"
             ItemsSource="{Binding ListaAsignaturas}"
             SelectedItem="{Binding SelectedAsignatura}"
             SelectionMode="Single"
-            WidthRequest="600">
+            WidthRequest="900">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
@@ -55,13 +56,13 @@
                         CornerRadius="10"
                         HasShadow="True"
                         HeightRequest="150"
-                        WidthRequest="150">
+                        WidthRequest="200">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer
                                 x:DataType="viewmodels:MainViewModel"
                                 BindingContext="{Binding Source={x:Reference asignaturas_stack}, Path=BindingContext}"
                                 Command="{Binding ObtenerLibrosCommand}"
-                                NumberOfTapsRequired="2" />
+                                NumberOfTapsRequired="1" />
                         </Frame.GestureRecognizers>
 
                         <VerticalStackLayout
@@ -69,6 +70,7 @@
                             HorizontalOptions="Center"
                             VerticalOptions="Center">
                             <Label
+                                FontFamily="lemon"
                                 FontSize="20"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Nombre}"
@@ -98,10 +100,15 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Button
-            Margin="10,10,0,0"
+        <ImageButton
+            Margin="10,20,0,0"
+            BackgroundColor="Transparent"
+            BorderColor="Transparent"
             Command="{Binding VolverAtrasDesdeAsignaturasCommand}"
+            HeightRequest="120"
             HorizontalOptions="Start"
-            Text="← Atrás" />
+            Source="atras.png"
+            Style="{StaticResource EstiloBotonAtras}"
+            WidthRequest="100" />
     </VerticalStackLayout>
 </StackLayout>

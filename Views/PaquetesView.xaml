@@ -26,6 +26,7 @@
 
         <Label
             FontAttributes="Bold"
+            FontFamily="okemo"
             FontSize="40"
             HorizontalOptions="Center"
             Text="CREAR PAQUETE" />
@@ -58,9 +59,10 @@
         <Label
             Margin="70,0,0,0"
             FontAttributes="Bold"
+            FontFamily="lemon"
             Text="Selecciona los libros para el paquete:" />
 
-        <Label Text="{Binding LibrosSeleccionados.Count}" />
+        <!--<Label Text="{Binding LibrosSeleccionados.Count}" />-->
 
         <HorizontalStackLayout>
             <!--  CollectionView de los libros  -->
@@ -140,7 +142,8 @@
             <!--  Stack de los filtros  -->
             <VerticalStackLayout Margin="80,0,0,0">
                 <Label
-                    Margin="40,0,0,20"
+                    Margin="0,0,0,20"
+                    FontFamily="lemon"
                     FontSize="30"
                     Text="Buscar libros" />
 
@@ -187,16 +190,20 @@
                     Margin="0,50,0,0"
                     BackgroundColor="IndianRed"
                     Command="{Binding LimpiarCommand}"
+                    FontFamily="lemon"
                     HeightRequest="50"
+                    Style="{StaticResource EstiloBotonLimpiar}"
                     Text="LIMPIAR FILTROS"
                     WidthRequest="150" />
 
                 <Button
-                    Margin="0,50,0,0"
-                    BackgroundColor="DarkBlue"
+                    Margin="0,30,0,0"
+                    BackgroundColor="LightSeaGreen"
                     Command="{Binding CrearPaqueteCommand}"
                     CornerRadius="10"
+                    FontFamily="lemon"
                     HeightRequest="50"
+                    Style="{StaticResource EstiloBotonAnadir}"
                     Text="Crear Paquete"
                     TextColor="White"
                     WidthRequest="200" />

@@ -24,6 +24,8 @@ namespace prestamosLibrosTFG.Converters
                 string s when s.Contains("Educación Física") => Colors.BlueViolet,
                 string s when s.Contains("Religión") => Colors.Purple,
                 string s when s.Contains("Sociales") => Colors.CornflowerBlue,
+                string s when s.Contains("Plástica") => Colors.LightGray,
+                string s when s.Contains("Música") => Colors.LightSalmon,
                 _ => Colors.LightGray // Color por defecto
             };
         }
