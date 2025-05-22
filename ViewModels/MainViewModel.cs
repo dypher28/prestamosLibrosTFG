@@ -95,6 +95,7 @@ namespace prestamosLibrosTFG.ViewModels
 
                     if (asignaturas != null && asignaturas.Count > 0)
                     {
+                        
                         ListaAsignaturas = asignaturas;
                         IsCursosVisible = false;
                         IsAsignaturasVisible = true;

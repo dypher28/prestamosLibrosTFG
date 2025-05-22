@@ -250,7 +250,7 @@ namespace prestamosLibrosTFG.ViewModels
             {
                 // No se seleccionó una imagen, usar imagen por defecto
                 Libro.Imagen = new LibroModel.ImageInfo();
-                Libro.Imagen.FileName = "librodefecto.png";
+                Libro.Imagen.Id = 0;
             }
 
             var request = new RequestModel

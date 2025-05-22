@@ -7,14 +7,14 @@ namespace prestamosLibrosTFG
         public App()
         {
             InitializeComponent();
-            MainPage = new SplashPage();
-            MostrarInicio();
+            MainPage = new AppShell();
+            MostrarSplash();
         }
 
-        private async void MostrarInicio()
+        private async void MostrarSplash()
         {
-            await Task.Delay(4000);
-            MainPage = new NavigationPage(new AppShell()); 
+            await Task.Delay(100);
+            await Application.Current.MainPage.Navigation.PushModalAsync(new SplashPage());
         }
 
     }

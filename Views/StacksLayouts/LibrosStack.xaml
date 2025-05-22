@@ -15,7 +15,6 @@
     x:Name="libros_stack"
     x:DataType="viewmodels:MainViewModel">
 
-
     <VerticalStackLayout>
         <Label
             Margin="0,20,0,20"
@@ -28,7 +27,7 @@
 
 
         <CollectionView
-            HeightRequest="500"
+            HeightRequest="600"
             HorizontalOptions="Fill"
             ItemsSource="{Binding ListaLibros}"
             SelectionMode="Single"
@@ -67,29 +66,32 @@
 
                             <Label
                                 FontAttributes="Bold"
+                                FontFamily="lemon"
                                 FontSize="18"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Titulo}"
                                 TextColor="Black" />
 
                             <Label
+                                FontFamily="lemon"
                                 FontSize="14"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Isbn}"
                                 TextColor="Gray" />
 
                             <Label
+                                FontFamily="lemon"
                                 FontSize="14"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Editorial}"
                                 TextColor="Gray" />
 
                             <Label
+                                FontFamily="lemon"
                                 FontSize="14"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Cantidad}"
                                 TextColor="Gray" />
-
                         </VerticalStackLayout>
 
 

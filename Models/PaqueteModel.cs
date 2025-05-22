@@ -17,7 +17,7 @@ namespace prestamosLibrosTFG.Models
         [JsonProperty("nombre")]
         public string Nombre { get; set; }
 
-        [JsonProperty("curso_id")]
+        [JsonProperty("curso")]
         public Curso Curso { get; set; }
 
         [JsonProperty("libros")]
@@ -39,16 +39,16 @@ namespace prestamosLibrosTFG.Models
 
     public class Curso
     {
-        [JsonProperty("id_curso")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("curso")]
+        [JsonProperty("nombreCurso")]
         public string Nombre { get; set; }
     }
 
     public class LibroInfo
     {
-        [JsonProperty("id_libro")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
         [JsonProperty("titulo")]

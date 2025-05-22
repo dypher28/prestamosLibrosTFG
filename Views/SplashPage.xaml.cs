@@ -7,7 +7,14 @@ public partial class SplashPage : ContentPage
     public SplashPage()
     {
         InitializeComponent();
+        IniciarSplash();
         AnimarTextoCargando();
+    }
+
+    private async void IniciarSplash()
+    {
+        await Task.Delay(3000);
+        await Navigation.PopModalAsync();
     }
 
     private async void AnimarTextoCargando()
@@ -36,8 +43,8 @@ public partial class SplashPage : ContentPage
         base.OnAppearing();
 
         // Animación para el logo
-        await LogoImage.FadeTo(1, 600); // Aparece
-        await LogoImage.TranslateTo(0, 0, 600, Easing.CubicOut); // Sube
+        await LogoImage.FadeTo(1, 600); 
+        await LogoImage.TranslateTo(0, 0, 600, Easing.CubicOut); 
         await LogoImage.ScaleTo(1.1, 200);
         await LogoImage.ScaleTo(1.0, 200);
 

@@ -33,10 +33,11 @@
             VerticalOptions="Center" />
 
         <CollectionView
-            HeightRequest="500"
+            HeightRequest="600"
             ItemsSource="{Binding ListaAsignaturas}"
             SelectedItem="{Binding SelectedAsignatura}"
             SelectionMode="Single"
+            VerticalScrollBarVisibility="Always"
             WidthRequest="900">
 
             <CollectionView.ItemsLayout>

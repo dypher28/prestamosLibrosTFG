@@ -51,6 +51,17 @@ namespace prestamosLibrosTFG.Models
             }
         }
 
+        //[JsonIgnore]
+        //public ImageSource ImageSource
+        //{
+        //    get
+        //    {
+        //        var bytes = Imagen?.Data;
+        //        if (bytes == null || bytes.Length == 0)
+        //            return null;
+        //        return ImageSource.FromStream(() => new MemoryStream(bytes));
+        //    }
+        //}
         [JsonIgnore]
         public ImageSource ImageSource
         {
@@ -58,10 +69,14 @@ namespace prestamosLibrosTFG.Models
             {
                 var bytes = Imagen?.Data;
                 if (bytes == null || bytes.Length == 0)
-                    return null;
+                {
+                    return ImageSource.FromFile("librodefecto.png");
+                }
+
                 return ImageSource.FromStream(() => new MemoryStream(bytes));
             }
         }
+
 
         private void OnImagenPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

@@ -43,104 +43,209 @@
                 TitleColor="White"
                 WidthRequest="250" />
 
+
             <Picker
-                Title="Seleccione el curso del paquete"
-                Margin="30,20,0,0"
+                x:Name="picker_cursos"
+                Title="Seleccione un curso"
+                Margin="30,10,0,0"
                 HeightRequest="70"
                 ItemDisplayBinding="{Binding Curso}"
-                ItemsSource="{Binding ListaCursosPaquete}"
-                SelectedItem="{Binding SelectedCursoPaquete, Mode=TwoWay}"
+                ItemsSource="{Binding ListaCursos}"
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedCurso, Mode=TwoWay}"
                 TitleColor="White"
-                WidthRequest="250" />
+                WidthRequest="250">
 
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                        BindingContext="{Binding Source={x:Reference picker_cursos}, Path=BindingContext}"
+                        Command="{Binding ObtenerAsignaturasCommand}"
+                        EventName="SelectedIndexChanged" />
 
+                    <toolkit:EventToCommandBehavior
+                        BindingContext="{Binding Source={x:Reference picker_cursos}, Path=BindingContext}"
+                        Command="{Binding }"
+                        EventName="Focused" />
+                </Picker.Behaviors>
+
+            </Picker>
+
+            <Button
+                Margin="30,30,0,0"
+                BackgroundColor="LightSeaGreen"
+                Command="{Binding CrearPaqueteCommand}"
+                CornerRadius="10"
+                FontFamily="lemon"
+                HeightRequest="50"
+                Style="{StaticResource EstiloBotonAnadir}"
+                Text="Crear Paquete"
+                TextColor="White"
+                WidthRequest="200" />
         </HorizontalStackLayout>
 
-        <Label
-            Margin="70,0,0,0"
-            FontAttributes="Bold"
-            FontFamily="lemon"
-            Text="Selecciona los libros para el paquete:" />
-
-        <!--<Label Text="{Binding LibrosSeleccionados.Count}" />-->
 
         <HorizontalStackLayout>
-            <!--  CollectionView de los libros  -->
-            <CollectionView
-                x:Name="LibrosCollectionView"
-                Margin="60,0,0,0"
-                HeightRequest="750"
-                ItemsSource="{Binding ListaLibrosFiltrada}"
-                SelectedItems="{Binding LibrosSeleccionados, Mode=TwoWay}"
-                SelectionMode="Multiple"
-                WidthRequest="700">
+            <VerticalStackLayout>
+                <Label
+                    Margin="70,0,0,0"
+                    FontAttributes="Bold"
+                    FontFamily="lemon"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Selecciona los libros para el paquete:" />
 
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="4" />
-                </CollectionView.ItemsLayout>
+                <!--  CollectionView de los libros disponibles  -->
+                <CollectionView
+                    x:Name="collectionViewLibros"
+                    Margin="60,0,0,0"
+                    HeightRequest="750"
+                    ItemsSource="{Binding ListaLibrosFiltrada}"
+                    SelectionChanged="CollectionViewLibros_SelectionChanged"
+                    SelectionMode="Multiple"
+                    WidthRequest="400">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                    </CollectionView.ItemsLayout>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:LibroModel">
-                        <Frame
-                            Margin="5"
-                            Padding="10"
-                            BackgroundColor="White"
-                            BorderColor="Gray"
-                            CornerRadius="10"
-                            HeightRequest="230"
-                            WidthRequest="150">
-                            <StackLayout>
-                                <ffimage:CachedImage
-                                    Aspect="AspectFill"
-                                    HeightRequest="150"
-                                    Source="{Binding ImageSource}"
-                                    WidthRequest="120" />
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="18"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Titulo}"
-                                    TextColor="Black" />
-                                <Label
-                                    FontAttributes="Bold"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Isbn}"
-                                    TextColor="Black" />
-                                <Label
-                                    FontSize="12"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Editorial}"
-                                    TextColor="Black" />
-                            </StackLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:LibroModel">
+                            <Frame
+                                Margin="5"
+                                Padding="10"
+                                BackgroundColor="White"
+                                BorderColor="Gray"
+                                CornerRadius="10"
+                                HeightRequest="350"
+                                WidthRequest="160">
+                                <StackLayout>
+                                    <ffimage:CachedImage
+                                        Aspect="AspectFill"
+                                        HeightRequest="180"
+                                        Source="{Binding ImageSource}"
+                                        WidthRequest="120" />
+                                    <Label
+                                        Margin="0,10,0,0"
+                                        FontAttributes="Bold"
+                                        FontFamily="lemon"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Titulo}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontFamily="lemon"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Isbn}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontFamily="lemon"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Editorial}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontFamily="lemon"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Cantidad}"
+                                        TextColor="Black" />
 
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
-                                    <!--  sin selección  -->
-                                    <VisualState Name="Normal">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="White" />
-                                            <Setter Property="BorderColor" Value="Gray" />
-                                        </VisualState.Setters>
-                                    </VisualState>
+                                    <Label
+                                        FontFamily="lemon"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Asignatura.Curso.NombreCurso}"
+                                        TextColor="Black" />
+                                </StackLayout>
 
-                                    <!--  seleccionado  -->
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="#D1E7DD" />
-                                            <Setter Property="BorderColor" Value="Green" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Frame>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <!--  sin selección  -->
+                                        <VisualState Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="White" />
+                                                <Setter Property="BorderColor" Value="Gray" />
+                                            </VisualState.Setters>
+                                        </VisualState>
 
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                        <!--  seleccionado  -->
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#D1E7DD" />
+                                                <Setter Property="BorderColor" Value="Green" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Frame>
 
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+
+            <!--  Vista previa de libros seleccionados  -->
+            <VerticalStackLayout Margin="80,0,0,0">
+                <Label
+                    FontAttributes="Bold"
+                    FontFamily="lemon"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Vista previa del paquete" />
+
+                <CollectionView
+                    HeightRequest="750"
+                    ItemsSource="{Binding LibrosSeleccionados}"
+                    SelectionMode="None"
+                    WidthRequest="350">
+
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:LibroModel">
+                            <Frame
+                                Margin="5"
+                                Padding="10"
+                                BackgroundColor="White"
+                                BorderColor="Gray"
+                                CornerRadius="10"
+                                HeightRequest="350"
+                                WidthRequest="160">
+                                <StackLayout>
+                                    <ffimage:CachedImage
+                                        Aspect="AspectFill"
+                                        HeightRequest="180"
+                                        Source="{Binding ImageSource}"
+                                        WidthRequest="120" />
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontFamily="lemon"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Titulo}"
+                                        TextColor="Black" />
+                                    <Label
+                                        FontFamily="lemon"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Isbn}" />
+                                    <Label
+                                        FontFamily="lemon"
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Asignatura.Curso.NombreCurso}" />
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
 
             <!--  Stack de los filtros  -->
-            <VerticalStackLayout Margin="80,0,0,0">
+            <VerticalStackLayout Margin="100,0,0,0">
                 <Label
                     Margin="0,0,0,20"
                     FontFamily="lemon"
@@ -155,29 +260,9 @@
                 </Entry>
 
                 <Picker
-                    x:Name="picker_cursos"
-                    Title="Seleccione un curso"
-                    Margin="0,20,0,20"
-                    HeightRequest="70"
-                    ItemDisplayBinding="{Binding Curso}"
-                    ItemsSource="{Binding ListaCursos}"
-                    SelectedIndex="0"
-                    SelectedItem="{Binding SelectedCurso, Mode=TwoWay}"
-                    TitleColor="White"
-                    WidthRequest="250">
-
-                    <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            BindingContext="{Binding Source={x:Reference picker_cursos}, Path=BindingContext}"
-                            Command="{Binding ObtenerAsignaturasCommand}"
-                            EventName="SelectedIndexChanged" />
-                    </Picker.Behaviors>
-
-                </Picker>
-
-                <Picker
                     x:Name="picker_asignaturas"
                     Title="Seleccione una asignatura"
+                    Margin="0,20,0,0"
                     HeightRequest="70"
                     IsEnabled="{Binding SelectedCurso, Converter={StaticResource SelectedCursoConverter}}"
                     ItemDisplayBinding="{Binding Nombre}"
@@ -196,17 +281,7 @@
                     Text="LIMPIAR FILTROS"
                     WidthRequest="150" />
 
-                <Button
-                    Margin="0,30,0,0"
-                    BackgroundColor="LightSeaGreen"
-                    Command="{Binding CrearPaqueteCommand}"
-                    CornerRadius="10"
-                    FontFamily="lemon"
-                    HeightRequest="50"
-                    Style="{StaticResource EstiloBotonAnadir}"
-                    Text="Crear Paquete"
-                    TextColor="White"
-                    WidthRequest="200" />
+
 
 
             </VerticalStackLayout>

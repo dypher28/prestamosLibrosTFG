@@ -20,13 +20,7 @@ namespace prestamosLibrosTFG.ViewModels
         private bool isCursoChecked = false;
 
         [ObservableProperty]
-        private ObservableCollection<CursoModel> listaCursos; // Lista del picker para los filtros
-
-        [ObservableProperty]
-        private ObservableCollection<CursoModel> listaCursosPaquete; // Lista del picker para crear el paquete
-
-        [ObservableProperty]
-        private CursoModel selectedCursoPaquete; // SelectedLibro para crear el paquete
+        private ObservableCollection<CursoModel> listaCursos; // Lista del picker para crear el paquete
 
         [ObservableProperty]
         private PaqueteModel paquete;
@@ -38,7 +32,7 @@ namespace prestamosLibrosTFG.ViewModels
         private ObservableCollection<AsignaturaModel> listaAsignaturas;
 
         [ObservableProperty]
-        private CursoModel selectedCurso; // SelectedLibro para los filtros
+        private CursoModel selectedCurso; // SelectedLibro para paquetes
 
         [ObservableProperty]
         private AsignaturaModel selectedAsignatura;
@@ -52,6 +46,9 @@ namespace prestamosLibrosTFG.ViewModels
         [ObservableProperty]
         private ObservableCollection<LibroModel> listaLibrosFiltrada;
 
+        private CursoModel _cursoAnterior;
+
+
         public PaqueteViewModel()
         {
             Paquete = new PaqueteModel();
@@ -59,10 +56,35 @@ namespace prestamosLibrosTFG.ViewModels
             LibrosSeleccionados = new ObservableCollection<object>();
             ObtenerLibros();
             ObtenerCursos();
-            ObtenerCursosPaquete();
 
         }
 
+        partial void OnSelectedCursoChanged(CursoModel value)
+        {
+            ConfirmarCambioCurso(value);
+        }
+
+        private async void ConfirmarCambioCurso(CursoModel nuevoCurso)
+        {
+            if (_cursoAnterior != null && nuevoCurso != null && _cursoAnterior != nuevoCurso)
+            {
+                bool confirmado = await App.Current.MainPage.DisplayAlert(
+                    "Confirmación",
+                    $"¿Estás seguro de que quieres cambiar el curso a {nuevoCurso.Curso}?",
+                    "Sí", "No");
+
+                if (!confirmado)
+                {
+                    // Volver al curso anterior
+                    SelectedCurso = _cursoAnterior;
+                    return;
+                }
+            }
+
+            _cursoAnterior = nuevoCurso;
+            ObtenerAsignaturasCommand.Execute(null);
+            FiltrarLibros();
+        }
 
         [RelayCommand] // Metodo para obtener los cursos
         public async Task ObtenerCursos()
@@ -80,34 +102,6 @@ namespace prestamosLibrosTFG.ViewModels
                 try
                 {
                     ListaCursos =
-                        JsonConvert.DeserializeObject<ObservableCollection<CursoModel>>(response.Data.ToString());
-                }
-                catch (Exception ex)
-                {
-                    Debug.Write(ex.StackTrace);
-                    Debug.Write(ex.ToString);
-                    Debug.Write(ex.Message);
-
-                }
-            }
-        }
-
-        [RelayCommand] // Metodo para obtener los cursos del picker de crear paquete
-        public async Task ObtenerCursosPaquete()
-        {
-            RequestModel request = new RequestModel()
-            {
-                Method = "GET",
-                Data = string.Empty,
-                Route = "http://localhost:8080/cursos/obtenerCursos"
-            };
-
-            ResponseModel response = await APIService.ExecuteRequest(request);
-            if (response.Success.Equals(0))
-            {
-                try
-                {
-                    ListaCursosPaquete =
                         JsonConvert.DeserializeObject<ObservableCollection<CursoModel>>(response.Data.ToString());
                 }
                 catch (Exception ex)
@@ -188,11 +182,11 @@ namespace prestamosLibrosTFG.ViewModels
             FiltrarLibros();
         }
 
-        partial void OnSelectedCursoChanged(CursoModel value)
-        {
-            ObtenerAsignaturasCommand.Execute(null);
-            FiltrarLibros();
-        }
+        //partial void OnSelectedCursoChanged(CursoModel value)
+        //{
+        //    ObtenerAsignaturasCommand.Execute(null);
+        //    FiltrarLibros();
+        //}
 
         partial void OnSelectedAsignaturaChanged(AsignaturaModel value)
         {
@@ -232,6 +226,7 @@ namespace prestamosLibrosTFG.ViewModels
                 }
             };
 
+            LibrosSeleccionados = null;
             SelectedCurso = null;
             SelectedAsignatura = null;
         }
@@ -257,7 +252,7 @@ namespace prestamosLibrosTFG.ViewModels
                 return;
             }
 
-            if (SelectedCursoPaquete == null)
+            if (SelectedCurso == null)
             {
                 await MostrarMensaje("Debes seleccionar un curso.");
                 return;
@@ -269,21 +264,22 @@ namespace prestamosLibrosTFG.ViewModels
                 return;
             }
 
-            //// Asignar el curso desde el modelo de selección
-            //Paquete.Curso = new Curso
-            //{
-            //    Id = SelectedCursoPaquete.IdCurso,
-            //    Nombre = SelectedCursoPaquete.Curso
-            //};
 
-            //// Asignar los libros seleccionados al paquete
-            //Paquete.Libros = LibrosSeleccionados
-            //    .Select(libro => new LibroInfo
-            //    {
-            //        Id = libro.Id,
-            //        Titulo = libro.Titulo
-            //    }).ToHashSet();
+            Paquete.Libros = new HashSet<LibroInfo>(
+                LibrosSeleccionados
+                    .OfType<LibroModel>() // Ensure the objects are of type LibroModel
+                    .Select(libro => new LibroInfo
+                    {
+                        Id = (int)libro.Id,
+                        Titulo = libro.Titulo
+                    })
+            );
 
+            Paquete.Curso = new Curso
+            {
+                Id = int.Parse(SelectedCurso.IdCurso),
+                Nombre = SelectedCurso.Curso
+            };
 
             // Crear y enviar la solicitud
             var request = new RequestModel
@@ -300,7 +296,7 @@ namespace prestamosLibrosTFG.ViewModels
 
                 // Limpiar campos
                 Paquete = new PaqueteModel();
-                SelectedCursoPaquete = null;
+                SelectedCurso = null;
                 LibrosSeleccionados.Clear();
             }
             else
