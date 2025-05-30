@@ -55,7 +55,7 @@ namespace prestamosLibrosTFG.Models
         public int Id { get; set; }
 
         [JsonProperty("fechaPrestamo")]
-        public DateTime FechaPrestamo { get; set; }
+        public DateTime? FechaPrestamo { get; set; }
 
         [JsonProperty("fechaDevolucion")]
         public DateTime? FechaDevolucion { get; set; }

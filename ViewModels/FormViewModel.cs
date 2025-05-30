@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 
 namespace prestamosLibrosTFG.ViewModels
 {
+    [QueryProperty(nameof(Libro),"Libro")]
     public partial class FormViewModel : ObservableObject
     {
         [ObservableProperty]
@@ -51,7 +52,7 @@ namespace prestamosLibrosTFG.ViewModels
 
         public FormViewModel()
         {
-            ObtenerCursos();
+            //ObtenerCursos();
             Libro = new LibroModel();
             Libro.Imagen = new LibroModel.ImageInfo();
             Libro.Imagen.FileName = RutaImagen;
@@ -70,6 +71,9 @@ namespace prestamosLibrosTFG.ViewModels
                 try
                 {
                     Libro.Imagen.FileName = RutaImagen;
+                    var bytes = File.ReadAllBytes(RutaImagen);
+                    Libro.Imagen.Data = bytes;
+                    OnPropertyChanged(nameof(Libro));
                 }
                 catch (Exception ex)
                 {
@@ -82,8 +86,8 @@ namespace prestamosLibrosTFG.ViewModels
             }
 
         }
-
-        private async void ObtenerCursos() // Metodo para obtener todos los cursos
+        [RelayCommand]
+        public async Task ObtenerCursos() // Metodo para obtener todos los cursos
         {
             RequestModel request = new RequestModel()
             {
@@ -99,6 +103,16 @@ namespace prestamosLibrosTFG.ViewModels
                 {
                     ListaCursos =
                         JsonConvert.DeserializeObject<ObservableCollection<CursoModel>>(response.Data.ToString());
+
+                    if (Libro?.Id != null && Libro.Id != 0)
+                    {
+                        var cursoId = Libro.Asignatura?.Curso?.Id?.ToString();
+                        if (!string.IsNullOrEmpty(cursoId))
+                        {
+                            SelectedCurso = ListaCursos.FirstOrDefault(c => c.IdCurso == cursoId);
+                        }
+                        
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -131,6 +145,12 @@ namespace prestamosLibrosTFG.ViewModels
                 {
                     ListaAsignaturas =
                         JsonConvert.DeserializeObject<ObservableCollection<AsignaturaModel>>(response.Data.ToString());
+
+                    var asignaturaId = Libro.Asignatura?.Id?.ToString();
+                    if (!string.IsNullOrEmpty(asignaturaId))
+                    {
+                        SelectedAsignatura = ListaAsignaturas.FirstOrDefault(a => a.IdAsignatura == asignaturaId);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -214,17 +234,21 @@ namespace prestamosLibrosTFG.ViewModels
                 return;
             }
 
-            if (await ExisteISBN(Libro.Isbn))
+            if (Libro.Id == null || Libro.Id == 0)
             {
-                await MostrarMensaje("Ya existe un libro con ese ISBN.");
-                return;
+                if (await ExisteISBN(Libro.Isbn))
+                {
+                    await MostrarMensaje("Ya existe un libro con ese ISBN.");
+                    return;
+                }
             }
+            
 
             if (Libro.Asignatura == null)
-                Libro.Asignatura = new LibroModel.AsignaturaInfo1();
+                Libro.Asignatura = new LibroModel.AsignaturaInfo();
 
             if (Libro.Asignatura.Curso == null)
-                Libro.Asignatura.Curso = new LibroModel.AsignaturaInfo1.CursoInfo1();
+                Libro.Asignatura.Curso = new LibroModel.AsignaturaInfo.CursoInfo();
 
             Libro.Asignatura.Curso.Id = int.Parse(SelectedCurso.IdCurso);
             Libro.Asignatura.Id = int.Parse(SelectedAsignatura.IdAsignatura);
@@ -248,9 +272,17 @@ namespace prestamosLibrosTFG.ViewModels
             }
             else
             {
-                // No se seleccionó una imagen, usar imagen por defecto
-                Libro.Imagen = new LibroModel.ImageInfo();
-                Libro.Imagen.Id = 0;
+                if (Libro.Imagen.Data.Length != 0 && Libro.Imagen.Data != null)
+                {
+
+                }
+                else
+                {
+                    // No se seleccionó una imagen, usar imagen por defecto
+                    Libro.Imagen = new LibroModel.ImageInfo();
+                    Libro.Imagen.Id = 0;
+                }
+                    
             }
 
             var request = new RequestModel

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="prestamosLibrosTFG.Views.InfoPrestamosView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behavior="clr-namespace:prestamosLibrosTFG.Behaviors"
+    xmlns:converters="clr-namespace:prestamosLibrosTFG.Converters"
+    xmlns:ffimage="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:models="clr-namespace:prestamosLibrosTFG.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:viewmodels="clr-namespace:prestamosLibrosTFG.ViewModels"
+    x:Name="info_prestamos_view"
+    x:DataType="viewmodels:InfoPrestamosViewModel"
+    BindingContext="{viewmodels:InfoPrestamosViewModel}">
+
+    <HorizontalStackLayout>
+        <VerticalStackLayout VerticalOptions="Center">
+
+            <VerticalStackLayout.Behaviors>
+                <toolkit:EventToCommandBehavior Command="{Binding InitViewCommand}" EventName="Loaded" />
+            </VerticalStackLayout.Behaviors>
+
+            <Label
+                FontFamily="okemo"
+                FontSize="30"
+                HorizontalOptions="Center"
+                Text="PRESTAMOS" />
+
+            <CollectionView
+                x:Name="collectionViewPrestamos"
+                Margin="10"
+                HeightRequest="750"
+                ItemsSource="{Binding ListaPrestamos}"
+                SelectionMode="Single"
+                WidthRequest="900">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        HorizontalItemSpacing="5"
+                        Orientation="Vertical"
+                        Span="2"
+                        VerticalItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PrestamoModel">
+                        <Frame
+                            BackgroundColor="White"
+                            HeightRequest="120"
+                            WidthRequest="350">
+                            <HorizontalStackLayout>
+                                <ffimage:CachedImage Source="prestamo.png" WidthRequest="50" />
+
+                                <VerticalStackLayout Margin="10">
+                                    <Label TextColor="Black">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    FontAttributes="Bold"
+                                                    Text="Alumno: "
+                                                    TextColor="Black" />
+                                                <Span Text="sss" TextColor="Black" />
+                                                <Span Text=" " />
+                                                <Span Text="ww" TextColor="Black" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label TextColor="Black">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    FontAttributes="Bold"
+                                                    Text="Nombre Paquete: "
+                                                    TextColor="Black" />
+                                                <Span Text="" TextColor="Black" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label TextColor="Black">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    FontAttributes="Bold"
+                                                    Text="Fecha Préstamo: "
+                                                    TextColor="Black" />
+                                                <Span Text="{Binding FechaPrestamo}" TextColor="Black" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </VerticalStackLayout>
+
+                            </HorizontalStackLayout>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal" />
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="LightBlue" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </VerticalStackLayout>
+    </HorizontalStackLayout>
+</ContentPage>

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static prestamosLibrosTFG.Models.LibroModel;
 
 namespace prestamosLibrosTFG.ViewModels
 {
@@ -171,5 +172,67 @@ namespace prestamosLibrosTFG.ViewModels
             IsAsignaturasVisible = true;
         }
 
+        [RelayCommand]
+        public async Task EditarLibro(LibroModel libro)
+        {
+
+            if (libro == null)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "NULL", "OK");
+                return;
+            }
+            libro.Asignatura = new AsignaturaInfo();
+            libro.Asignatura.Curso = new AsignaturaInfo.CursoInfo();
+            libro.Asignatura.Id = int.Parse(SelectedAsignatura.IdAsignatura);
+            libro.Asignatura.Curso.Id = int.Parse(SelectedCurso.IdCurso);
+
+            await App.Current.MainPage.DisplayAlert("Editar", "EDITAR LIBRO", "OK");
+            await Shell.Current.GoToAsync("//FormView", new Dictionary<string, object>()
+            {
+                ["Libro"] = libro,
+                
+            });
+
+        }
+
+        [RelayCommand]
+        public async Task BorrarLibro(LibroModel libro)
+        {
+            bool confirm = await App.Current.MainPage.DisplayAlert("Confirmación", $"¿Quieres borrar el libro: {libro.Titulo}?", "Sí", "No");
+            if (confirm)
+            {
+                
+                RequestModel request = new RequestModel()
+                {
+                    Method = "DELETE",
+                    Data = string.Empty,
+                    Route = "http://localhost:8080/libros/borrarLibro/" + libro.Id
+                };
+
+                ResponseModel response = await APIService.ExecuteRequest(request);
+                if (response.Success.Equals(0))
+                {
+                    try
+                    {
+                        ListaLibros.Remove(libro);
+                        //var libros = JsonConvert.DeserializeObject<ObservableCollection<LibroModel>>(response.Data.ToString());
+                        await App.Current.MainPage.DisplayAlert("Información", "Libro borrado correctamente", "Aceptar");
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Write(ex.StackTrace);
+                        Debug.Write(ex.ToString());
+                        Debug.Write(ex.Message);
+                    }
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Error", "Error al borrar el libro", "Aceptar");
+                }
+
+            }
+        }
     }
+
 }

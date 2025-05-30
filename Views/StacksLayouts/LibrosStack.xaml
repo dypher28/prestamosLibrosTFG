@@ -45,6 +45,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:LibroModel">
                     <Frame
+                        x:Name="itemBorder"
                         Margin="10"
                         Padding="15"
                         BackgroundColor="White"
@@ -53,6 +54,18 @@
                         HeightRequest="280"
                         VerticalOptions="Start"
                         WidthRequest="150">
+                        <FlyoutBase.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    Command="{Binding Source={x:Reference libros_stack}, Path=BindingContext.EditarLibroCommand}"
+                                    CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
+                                    Text="Editar" />
+                                <MenuFlyoutItem
+                                    Command="{Binding Source={x:Reference libros_stack}, Path=BindingContext.BorrarLibroCommand}"
+                                    CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
+                                    Text="Eliminar" />
+                            </MenuFlyout>
+                        </FlyoutBase.ContextFlyout>
                         <VerticalStackLayout
                             HorizontalOptions="Center"
                             Spacing="5"
@@ -94,7 +107,6 @@
                                 TextColor="Gray" />
                         </VerticalStackLayout>
 
-
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="Normal" />
@@ -115,7 +127,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
 
         <ImageButton
             Margin="10,20,0,0"

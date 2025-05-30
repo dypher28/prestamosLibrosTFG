@@ -29,12 +29,11 @@
             HeightRequest="500"
             ItemsSource="{Binding ListaCursos}"
             SelectedItem="{Binding SelectedCurso}"
-            SelectionMode="Single"
-            WidthRequest="900">
+            SelectionMode="Single">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
-                    HorizontalItemSpacing="0"
+                    HorizontalItemSpacing="40"
                     Orientation="Vertical"
                     Span="3"
                     VerticalItemSpacing="20" />
@@ -42,6 +41,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:CursoModel">
+                    
                     <Frame
                         Margin="5"
                         Padding="10"

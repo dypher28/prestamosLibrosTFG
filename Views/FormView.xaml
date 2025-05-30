@@ -27,6 +27,12 @@
         StrokeShape="RoundRectangle 20"
         StrokeThickness="0"
         WidthRequest="1000">
+        <Border.Behaviors>
+            <toolkit:EventToCommandBehavior
+                BindingContext="{Binding Source={x:Reference form_view}, Path=BindingContext}"
+                Command="{Binding ObtenerCursosCommand}"
+                EventName="Loaded" />
+        </Border.Behaviors>
 
         <Border.Shadow>
             <Shadow
@@ -59,7 +65,7 @@
                     <ffimage:CachedImage
                         ErrorPlaceholder="librodefecto.png"
                         HeightRequest="300"
-                        Source="{Binding Libro.Imagen.FileName, Converter={StaticResource ImagenPorDefecto}}"
+                        Source="{Binding Libro.Imagen, Converter={StaticResource ImagenPorDefecto}}"
                         WidthRequest="200" />
 
                 </Border>

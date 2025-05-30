@@ -20,6 +20,7 @@
     </FlyoutItem>
 
     <FlyoutItem Title="ALTA LIBROS">
+
         <ShellContent ContentTemplate="{DataTemplate views:FormView}" Route="FormView" />
     </FlyoutItem>
 
@@ -29,6 +30,10 @@
 
     <FlyoutItem Title="ASIGNAR PAQUETE">
         <ShellContent ContentTemplate="{DataTemplate views:PrestamosView}" Route="PrestamosView" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="INFO PRÉSTAMOS">
+        <ShellContent ContentTemplate="{DataTemplate views:InfoPrestamosView}" Route="InfoPrestamosView" />
     </FlyoutItem>
 
     <FlyoutItem Title="SALIR">

@@ -11,8 +11,8 @@ namespace prestamosLibrosTFG.Models
     [JsonObject]
     public class PaqueteModel
     {
-        [JsonProperty("id_paquete")]
-        public int Id { get; set; }
+        [JsonProperty("id")]
+        public int? Id { get; set; }
 
         [JsonProperty("nombre")]
         public string Nombre { get; set; }
@@ -21,10 +21,10 @@ namespace prestamosLibrosTFG.Models
         public Curso Curso { get; set; }
 
         [JsonProperty("libros")]
-        public HashSet<LibroInfo> Libros { get; set; } = new HashSet<LibroInfo>();
+        public HashSet<LibroInfoModel> Libros { get; set; } = new();
 
         [JsonProperty("prestamos")]
-        public HashSet<Prestamo> Prestamos { get; set; } = new HashSet<Prestamo>();
+        public HashSet<PrestamoModel> Prestamos { get; set; } = new();
 
         // Constructor
         public PaqueteModel() { }
@@ -37,30 +37,43 @@ namespace prestamosLibrosTFG.Models
         }
     }
 
-    public class Curso
-    {
-        [JsonProperty("id")]
-        public int Id { get; set; }
+        // Clase anidada Curso
+        public class Curso
+        {
+            [JsonProperty("id")]
+            public int Id { get; set; }
 
-        [JsonProperty("nombreCurso")]
-        public string Nombre { get; set; }
-    }
+            [JsonProperty("nombreCurso")]
+            public string Nombre { get; set; }
+        }
 
-    public class LibroInfo
-    {
-        [JsonProperty("id")]
-        public int Id { get; set; }
+        // Clase anidada Libro
+        public class LibroInfoModel
+        {
+            [JsonProperty("id")]
+            public int Id { get; set; }
 
-        [JsonProperty("titulo")]
-        public string Titulo { get; set; }
-    }
+            [JsonProperty("titulo")]
+            public string Titulo { get; set; }
 
-    public class Prestamo
-    {
-        [JsonProperty("id_prestamo")]
-        public int Id { get; set; }
+            [JsonProperty("editorial")]
+            public string Editorial { get; set; }
 
-        [JsonProperty("fecha_prestamo")]
-        public DateTime FechaPrestamo { get; set; }
-    }
+            [JsonProperty("cantidad")]
+            public int Cantidad { get; set; }
+
+            [JsonProperty("isbn")]
+            public string Isbn { get; set; }
+        }
+
+        // Clase anidada Prestamo
+        public class PrestamoModel
+        {
+            [JsonProperty("id_prestamo")]
+            public int Id { get; set; }
+
+            [JsonProperty("fechaPrestamo")]
+            public DateTime? FechaPrestamo { get; set; }
+        }
+    
 }

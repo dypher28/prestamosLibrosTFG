@@ -16,178 +16,330 @@
     x:DataType="viewmodels:PrestamosViewModel"
     BindingContext="{viewmodels:PrestamosViewModel}">
 
-    <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior Command="{Binding ObtenerMartriculasCommand}" EventName="Loaded" />
-        <toolkit:EventToCommandBehavior Command="{Binding ObtenerPaquetesCommand}" EventName="Loaded" />
-    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-    <HorizontalStackLayout>
 
-        <VerticalStackLayout VerticalOptions="Center">
-            <Label
-                FontFamily="okemo"
-                FontSize="30"
-                HorizontalOptions="Center"
-                Text="ALUMNOS" />
-            <!--  collectionView de los alumnos  -->
+    <VerticalStackLayout Padding="10">
 
-            <CollectionView
-                Margin="10"
+        <VerticalStackLayout.Behaviors>
+            <toolkit:EventToCommandBehavior Command="{Binding InicializarCommand}" EventName="Loaded" />
+        </VerticalStackLayout.Behaviors>
+
+        <HorizontalStackLayout Padding="30" HorizontalOptions="Center">
+            <VerticalStackLayout>
+                <Label
+                    Margin="0,30,0,0"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Text="Filtrar por curso" />
+                <Picker
+                    Title="Selecciona un curso"
+                    HorizontalOptions="Center"
+                    ItemDisplayBinding="{Binding Curso}"
+                    ItemsSource="{Binding ListaCursos}"
+                    SelectedItem="{Binding SelectedCurso}" />
+            </VerticalStackLayout>
+            <Entry
+                Margin="30,60,0,0"
+                Placeholder="Buscar por nombre o apellidos"
+                Text="{Binding FiltroNombreAlumno}"
+                VerticalOptions="Center"
+                WidthRequest="300" />
+
+            <Button
+                Margin="30,60,0,0"
+                BackgroundColor="LightSeaGreen"
+                Command="{Binding CrearPrestamosCommand}"
+                CornerRadius="10"
+                FontFamily="lemon"
+                HeightRequest="50"
+                Style="{StaticResource EstiloBotonAnadir}"
+                Text="Asignar Paquete"
+                TextColor="White"
+                WidthRequest="200" />
+
+
+            <Button
+                Margin="30,60,0,0"
+                BackgroundColor="IndianRed"
+                Command="{Binding LimpiarCommand}"
+                FontFamily="lemon"
+                HeightRequest="50"
+                Style="{StaticResource EstiloBotonLimpiar}"
+                Text="LIMPIAR"
+                WidthRequest="150" />
+
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout>
+
+            <VerticalStackLayout VerticalOptions="Center">
+                <Label
+                    FontFamily="okemo"
+                    FontSize="30"
+                    HorizontalOptions="Center"
+                    Text="ALUMNOS" />
+
+                <CollectionView
+                    x:Name="collectionViewMatriculas"
+                    Margin="10"
+                    HeightRequest="750"
+                    ItemsSource="{Binding ListaMatriculas}"
+                    SelectedItem="{Binding SelectedMatricula}"
+                    SelectionChanged="CollectionViewMatriculas_SelectionChanged"
+                    SelectionMode="Multiple"
+                    WidthRequest="400">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:MatriculaModel">
+                            <Frame
+                                BackgroundColor="White"
+                                HeightRequest="120"
+                                WidthRequest="350">
+                                <HorizontalStackLayout>
+                                    <ffimage:CachedImage Source="user.png" WidthRequest="50" />
+
+                                    <VerticalStackLayout Margin="10">
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Nombre: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Alumno.Nombre}" TextColor="Black" />
+                                                    <Span Text=" " />
+                                                    <Span Text="{Binding Alumno.Apellidos}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Año escolar: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding AnioEscolar}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Curso: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Curso.NombreCurso}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </VerticalStackLayout>
+
+                                </HorizontalStackLayout>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="LightBlue" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout VerticalOptions="Center">
+                <Label
+                    FontFamily="okemo"
+                    FontSize="30"
+                    HorizontalOptions="Center"
+                    Text="PAQUETES" />
+
+                <CollectionView
+                    Margin="10"
+                    HeightRequest="750"
+                    ItemsSource="{Binding ListaPaquetes}"
+                    SelectedItem="{Binding SelectedPaquete}"
+                    SelectionMode="Single"
+                    WidthRequest="400">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:PaqueteModel">
+                            <Frame
+                                x:Name="itemBorder"
+                                BackgroundColor="White"
+                                HeightRequest="100"
+                                WidthRequest="350">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        x:DataType="viewmodels:PrestamosViewModel"
+                                        BindingContext="{Binding Source={x:Reference prestamos_view}, Path=BindingContext}"
+                                        NumberOfTapsRequired="2" />
+                                </Frame.GestureRecognizers>
+
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem
+                                            Command="{Binding Source={x:Reference prestamos_view}, Path=BindingContext.EditarPaqueteCommand}"
+                                            CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
+                                            Text="Editar" />
+                                        <MenuFlyoutItem
+                                            Command="{Binding Source={x:Reference prestamos_view}, Path=BindingContext.BorrarPaqueteCommand}"
+                                            CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
+                                            Text="Eliminar" />
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+
+                                <HorizontalStackLayout>
+                                    <ffimage:CachedImage Source="paquete.png" WidthRequest="50" />
+
+                                    <VerticalStackLayout Margin="10">
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Nombre: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Nombre}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Curso: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Curso.Nombre}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </VerticalStackLayout>
+
+                                </HorizontalStackLayout>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </VerticalStackLayout>
+
+
+            <!--  Detalle del paquete con libros  -->
+            <VerticalStackLayout
+                Margin="20,0"
                 HeightRequest="750"
-                ItemsSource="{Binding ListaMatriculas}"
-                SelectedItem="{Binding SelectedMatricula}"
-                SelectionMode="Single"
+                IsVisible="{Binding SelectedPaquete, Converter={StaticResource NullToBoolConverter}}"
                 WidthRequest="400">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:MatriculaModel">
-                        <Frame
-                            BackgroundColor="White"
-                            HeightRequest="120"
-                            WidthRequest="350">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    x:DataType="viewmodels:PrestamosViewModel"
-                                    BindingContext="{Binding Source={x:Reference prestamos_view}, Path=BindingContext}"
-                                    NumberOfTapsRequired="2" />
-                            </Frame.GestureRecognizers>
-                            <HorizontalStackLayout>
-                                <ffimage:CachedImage Source="user.png" WidthRequest="50" />
 
-                                <VerticalStackLayout Margin="10">
-                                    <Label TextColor="Black">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    FontAttributes="Bold"
-                                                    Text="Nombre: "
-                                                    TextColor="Black" />
-                                                <Span Text="{Binding Alumno.Nombre}" TextColor="Black" />
-                                                <Span Text=" " />
-                                                <Span Text="{Binding Alumno.Apellidos}" TextColor="Black" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label TextColor="Black">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    FontAttributes="Bold"
-                                                    Text="Año escolar: "
-                                                    TextColor="Black" />
-                                                <Span Text="{Binding AnioEscolar}" TextColor="Black" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label TextColor="Black">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    FontAttributes="Bold"
-                                                    Text="Curso: "
-                                                    TextColor="Black" />
-                                                <Span Text="{Binding Curso.NombreCurso}" TextColor="Black" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </VerticalStackLayout>
+                <Label
+                    FontFamily="okemo"
+                    FontSize="24"
+                    HorizontalOptions="Center"
+                    Text="LIBROS DEL PAQUETE" />
 
-                            </HorizontalStackLayout>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
-                                    <VisualState Name="Normal" />
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="LightBlue" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                <!--  Este contenedor es el que ahora usará BindableLayout  -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding SelectedPaquete.Libros}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:LibroModel">
+                            <Frame
+                                Margin="5"
+                                Padding="10"
+                                BackgroundColor="White"
+                                HeightRequest="120">
 
-            </CollectionView>
-        </VerticalStackLayout>
+                                <HorizontalStackLayout>
+                                    <ffimage:CachedImage
+                                        HeightRequest="50"
+                                        Source="libro.png"
+                                        WidthRequest="50" />
 
-        <VerticalStackLayout VerticalOptions="Center">
-            <Label
-                FontFamily="okemo"
-                FontSize="30"
-                HorizontalOptions="Center"
-                Text="PAQUETES" />
-            <!--  collectionView de los paquetes  -->
-            <CollectionView
-                Margin="10"
-                HeightRequest="750"
-                ItemsSource="{Binding ListaPaquetes}"
-                SelectedItem="{Binding SelectedPaquete}"
-                SelectionMode="Single"
-                WidthRequest="400">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:PaqueteModel">
-                        <Frame
-                            BackgroundColor="White"
-                            HeightRequest="100"
-                            WidthRequest="350">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    x:DataType="viewmodels:PrestamosViewModel"
-                                    BindingContext="{Binding Source={x:Reference prestamos_view}, Path=BindingContext}"
-                                    NumberOfTapsRequired="2" />
-                            </Frame.GestureRecognizers>
-                            <HorizontalStackLayout>
-                                <ffimage:CachedImage Source="paquete.png" WidthRequest="50" />
+                                    <VerticalStackLayout Margin="10">
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Título: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Titulo}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="ISBN: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Isbn}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Editorial: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Editorial}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label TextColor="Black">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span
+                                                        FontAttributes="Bold"
+                                                        Text="Cantidad: "
+                                                        TextColor="Black" />
+                                                    <Span Text="{Binding Cantidad}" TextColor="Black" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
 
-                                <VerticalStackLayout Margin="10">
-                                    <Label TextColor="Black">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    FontAttributes="Bold"
-                                                    Text="Nombre: "
-                                                    TextColor="Black" />
-                                                <Span Text="{Binding Nombre}" TextColor="Black" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label TextColor="Black">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span
-                                                    FontAttributes="Bold"
-                                                    Text="Curso: "
-                                                    TextColor="Black" />
-                                                <Span Text="{Binding Curso.Nombre}" TextColor="Black" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </VerticalStackLayout>
 
-                            </HorizontalStackLayout>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
-                                    <VisualState Name="Normal" />
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="LightGreen" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
 
-            </CollectionView>
-        </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
 
-        <!--  PONER AQUI EL STACK DE PAQUETE DETALLE  -->
+            </VerticalStackLayout>
 
-    </HorizontalStackLayout>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+
 </ContentPage>

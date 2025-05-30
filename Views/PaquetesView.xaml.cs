@@ -15,6 +15,14 @@ public partial class PaquetesView : ContentPage
         BindingContext = new PaqueteViewModel();
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        var viewModel = BindingContext as PaqueteViewModel;
+        viewModel?.InitViewCommand.Execute(null);
+
+    }
+
     private void CollectionViewLibros_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (BindingContext is PaqueteViewModel vm)

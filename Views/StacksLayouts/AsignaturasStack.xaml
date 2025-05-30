@@ -37,8 +37,7 @@
             ItemsSource="{Binding ListaAsignaturas}"
             SelectedItem="{Binding SelectedAsignatura}"
             SelectionMode="Single"
-            VerticalScrollBarVisibility="Always"
-            WidthRequest="900">
+            VerticalScrollBarVisibility="Always">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout
