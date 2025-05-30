@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace prestamosLibrosTFG.ViewModels
 {
-    [QueryProperty(nameof(Libro),"Libro")]
+    [QueryProperty(nameof(Libro), "Libro")]
     public partial class FormViewModel : ObservableObject
     {
         [ObservableProperty]
@@ -111,7 +111,7 @@ namespace prestamosLibrosTFG.ViewModels
                         {
                             SelectedCurso = ListaCursos.FirstOrDefault(c => c.IdCurso == cursoId);
                         }
-                        
+
                     }
                 }
                 catch (Exception ex)
@@ -127,7 +127,7 @@ namespace prestamosLibrosTFG.ViewModels
         [RelayCommand] // Metodo para obtener todas las asignaturas de un curso
         public async Task ObtenerAsignaturas()
         {
-            if(SelectedCurso == null)
+            if (SelectedCurso == null)
             {
                 return;
             }
@@ -196,7 +196,7 @@ namespace prestamosLibrosTFG.ViewModels
             var request = new RequestModel
             {
                 Method = "GET",
-                Route = $"http://localhost:8080/libros/existeISBN/{isbn}" 
+                Route = $"http://localhost:8080/libros/existeISBN/{isbn}"
             };
 
             var response = await APIService.ExecuteRequest(request);
@@ -242,7 +242,7 @@ namespace prestamosLibrosTFG.ViewModels
                     return;
                 }
             }
-            
+
 
             if (Libro.Asignatura == null)
                 Libro.Asignatura = new LibroModel.AsignaturaInfo();
@@ -269,20 +269,15 @@ namespace prestamosLibrosTFG.ViewModels
                 var id = await response_img.Content.ReadFromJsonAsync<int>();
                 Libro.Imagen.Id = id;
                 Libro.Imagen.FileName = Path.GetFileName(RutaImagen);
+                RutaImagen = "librodefecto.png";
             }
             else
             {
-                if (Libro.Imagen.Data.Length != 0 && Libro.Imagen.Data != null)
-                {
 
-                }
-                else
-                {
-                    // No se seleccionó una imagen, usar imagen por defecto
-                    Libro.Imagen = new LibroModel.ImageInfo();
-                    Libro.Imagen.Id = 0;
-                }
-                    
+                Libro.Imagen = new LibroModel.ImageInfo();
+                Libro.Imagen.Id = 0;
+
+
             }
 
             var request = new RequestModel
@@ -298,6 +293,7 @@ namespace prestamosLibrosTFG.ViewModels
                 await MostrarMensaje("Libro creado correctamente.");
                 await ObtenerLibros();
                 LimpiarCampos();
+
             }
             else
             {
@@ -319,8 +315,6 @@ namespace prestamosLibrosTFG.ViewModels
             SelectedCurso = null;
             SelectedAsignatura = null;
             Cantidad = "1";
-            
-            //OnPropertyChanged(nameof(Libro));
         }
 
         [RelayCommand] // Comando para llamar en el boton de limpiar

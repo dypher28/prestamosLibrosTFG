@@ -23,6 +23,9 @@ namespace prestamosLibrosTFG.Models
 
         [JsonProperty("devuelto")]
         public bool Devuelto { get; set; }
+
+        [JsonProperty("fechaPrestamo")]
+        public DateTime? FechaPrestamo { get; set; }
     }
 
     public class MatriculaInfo

@@ -46,12 +46,12 @@
                 <DataTemplate x:DataType="models:LibroModel">
                     <Frame
                         x:Name="itemBorder"
-                        Margin="10"
-                        Padding="15"
+                        Margin="5"
+                        Padding="5"
                         BackgroundColor="White"
                         CornerRadius="15"
                         HasShadow="True"
-                        HeightRequest="280"
+                        HeightRequest="300"
                         VerticalOptions="Start"
                         WidthRequest="150">
                         <FlyoutBase.ContextFlyout>
@@ -80,7 +80,7 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontFamily="lemon"
-                                FontSize="18"
+                                FontSize="14"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding Titulo}"
                                 TextColor="Black" />

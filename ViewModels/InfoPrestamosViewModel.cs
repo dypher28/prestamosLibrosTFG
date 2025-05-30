@@ -26,7 +26,6 @@ namespace prestamosLibrosTFG.ViewModels
         [ObservableProperty]
         private PrestamoModel prestamo;
 
-
         [RelayCommand]
         public async Task InitView()
         {

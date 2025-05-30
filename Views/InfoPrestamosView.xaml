@@ -44,10 +44,10 @@
                         VerticalItemSpacing="10" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:PrestamoModel">
+                    <DataTemplate x:DataType="models:HacerPrestamoModel">
                         <Frame
                             BackgroundColor="White"
-                            HeightRequest="120"
+                            HeightRequest="150"
                             WidthRequest="350">
                             <HorizontalStackLayout>
                                 <ffimage:CachedImage Source="prestamo.png" WidthRequest="50" />
@@ -60,12 +60,12 @@
                                                     FontAttributes="Bold"
                                                     Text="Alumno: "
                                                     TextColor="Black" />
-                                                <Span Text="sss" TextColor="Black" />
-                                                <Span Text=" " />
-                                                <Span Text="ww" TextColor="Black" />
+                                                <Span Text="{Binding Matricula.Id}" TextColor="Black" />
+                                                <Span Text=" Apellidos" TextColor="Black" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
+
                                     <Label TextColor="Black">
                                         <Label.FormattedText>
                                             <FormattedString>
@@ -73,10 +73,11 @@
                                                     FontAttributes="Bold"
                                                     Text="Nombre Paquete: "
                                                     TextColor="Black" />
-                                                <Span Text="" TextColor="Black" />
+                                                <Span Text="sdsd" TextColor="Black" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
+
                                     <Label TextColor="Black">
                                         <Label.FormattedText>
                                             <FormattedString>
@@ -84,10 +85,11 @@
                                                     FontAttributes="Bold"
                                                     Text="Fecha Préstamo: "
                                                     TextColor="Black" />
-                                                <Span Text="{Binding FechaPrestamo}" TextColor="Black" />
+                                                <Span Text="{Binding FechaPrestamo, StringFormat='{0:dd/MM/yyyy}'}" TextColor="Black" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
+
                                 </VerticalStackLayout>
 
                             </HorizontalStackLayout>
