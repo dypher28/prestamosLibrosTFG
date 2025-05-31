@@ -195,13 +195,9 @@
                                 <FlyoutBase.ContextFlyout>
                                     <MenuFlyout>
                                         <MenuFlyoutItem
-                                            Command="{Binding Source={x:Reference prestamos_view}, Path=BindingContext.EditarPaqueteCommand}"
-                                            CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
-                                            Text="Editar" />
-                                        <MenuFlyoutItem
                                             Command="{Binding Source={x:Reference prestamos_view}, Path=BindingContext.BorrarPaqueteCommand}"
                                             CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
-                                            Text="Eliminar" />
+                                            Text="Borrar" />
                                     </MenuFlyout>
                                 </FlyoutBase.ContextFlyout>
 

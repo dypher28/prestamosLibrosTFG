@@ -53,7 +53,7 @@ namespace prestamosLibrosTFG.ViewModels
 
         public PaqueteViewModel()
         {
-            
+
 
         }
 
@@ -64,23 +64,37 @@ namespace prestamosLibrosTFG.ViewModels
             OnPropertyChanged(nameof(Paquete));
             LibrosSeleccionados = new ObservableCollection<object>();
             ObtenerLibros();
+            _isFirst = true;
+            SelectedAsignatura = null;
+            SelectedCurso = null;
             ObtenerCursos();
         }
 
         partial void OnSelectedCursoChanged(CursoModel value)
         {
-            ConfirmarCambioCurso(value);
             if (_isFirst)
             {
+                _cursoAnterior = value;
+
                 FiltrarLibros();
                 _isFirst = false;
+            }
+            else
+            {
+                ConfirmarCambioCurso(value);
+
             }
         }
 
         private async void ConfirmarCambioCurso(CursoModel nuevoCurso)
         {
-            if (_cursoAnterior != null && nuevoCurso != null && _cursoAnterior != nuevoCurso)
+            if (LibrosSeleccionados?.Count == 0 || LibrosSeleccionados == null)
             {
+                FiltrarLibros();
+            }
+            else
+            {
+                if (nuevoCurso == _cursoAnterior || nuevoCurso == null) return;
                 bool confirmado = await App.Current.MainPage.DisplayAlert(
                     "Confirmación",
                     $"¿Estás seguro de que quieres cambiar el curso a {nuevoCurso.Curso}?",
@@ -94,12 +108,12 @@ namespace prestamosLibrosTFG.ViewModels
                 }
 
                 LibrosSeleccionados = null;
-                
+
                 ObtenerAsignaturasCommand.Execute(null);
                 FiltrarLibros();
+
             }
             _cursoAnterior = nuevoCurso;
-
         }
 
         [RelayCommand] // Metodo para obtener los cursos
@@ -167,6 +181,7 @@ namespace prestamosLibrosTFG.ViewModels
             {
                 return;
             }
+            SelectedAsignatura = null;
             RequestModel request = new RequestModel()
             {
                 Method = "GET",
@@ -222,11 +237,11 @@ namespace prestamosLibrosTFG.ViewModels
             if (SelectedAsignatura?.IdAsignatura != null)
                 librosFiltrados = librosFiltrados.Where(l =>
                     l.Asignatura?.Id == int.Parse(SelectedAsignatura.IdAsignatura));
-            
+
             ListaLibrosFiltrada = new ObservableCollection<LibroModel>(librosFiltrados);
         }
 
-     
+
         [RelayCommand] // Comando para llamar en el boton de limpiar
         public void Limpiar()
         {
@@ -281,7 +296,7 @@ namespace prestamosLibrosTFG.ViewModels
                 Editorial = libro.Editorial,
                 Cantidad = libro.Cantidad ?? 0,
                 Isbn = libro.Isbn
-                })
+            })
             );
 
 

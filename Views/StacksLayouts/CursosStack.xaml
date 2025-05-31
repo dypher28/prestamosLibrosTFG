@@ -41,7 +41,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:CursoModel">
-                    
+
                     <Frame
                         Margin="5"
                         Padding="10"

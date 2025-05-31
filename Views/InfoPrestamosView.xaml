@@ -16,8 +16,11 @@
     x:DataType="viewmodels:InfoPrestamosViewModel"
     BindingContext="{viewmodels:InfoPrestamosViewModel}">
 
-    <HorizontalStackLayout>
-        <VerticalStackLayout VerticalOptions="Center">
+    <Grid>
+        <VerticalStackLayout
+            HorizontalOptions="Fill"
+            IsClippedToBounds="True"
+            VerticalOptions="Center">
 
             <VerticalStackLayout.Behaviors>
                 <toolkit:EventToCommandBehavior Command="{Binding InitViewCommand}" EventName="Loaded" />
@@ -25,30 +28,65 @@
 
             <Label
                 FontFamily="okemo"
-                FontSize="30"
+                FontSize="40"
                 HorizontalOptions="Center"
                 Text="PRESTAMOS" />
+
+            <Entry
+                Margin="0,30,0,30"
+                Placeholder="Buscar por nombre de paquete o alumno"
+                Text="{Binding FiltroNombrePrestamo}"
+                VerticalOptions="Center"
+                WidthRequest="300" />
 
             <CollectionView
                 x:Name="collectionViewPrestamos"
                 Margin="10"
-                HeightRequest="750"
+                HorizontalOptions="Fill"
                 ItemsSource="{Binding ListaPrestamos}"
-                SelectionMode="Single"
-                WidthRequest="900">
+                SelectionMode="Single">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
                         HorizontalItemSpacing="5"
                         Orientation="Vertical"
-                        Span="2"
+                        Span="3"
                         VerticalItemSpacing="10" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:HacerPrestamoModel">
+                    <DataTemplate x:DataType="models:MostrarPrestamoModel">
                         <Frame
+                            x:Name="itemBorder"
                             BackgroundColor="White"
                             HeightRequest="150"
                             WidthRequest="350">
+                            <Frame.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding DevueltoTexto}"
+                                    TargetType="Frame"
+                                    Value="Sí">
+                                    <Setter Property="BackgroundColor" Value="#C9F5C2" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding DevueltoTexto}"
+                                    TargetType="Frame"
+                                    Value="No">
+                                    <Setter Property="BackgroundColor" Value="#F5CBBC" />
+                                </DataTrigger>
+                            </Frame.Triggers>
+
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem
+                                        Command="{Binding Source={x:Reference info_prestamos_view}, Path=BindingContext.DevolverPrestamoCommand}"
+                                        CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
+                                        Text="Devolver Préstamo" />
+                                    <MenuFlyoutItem
+                                        Command="{Binding Source={x:Reference info_prestamos_view}, Path=BindingContext.BorrarPrestamoCommand}"
+                                        CommandParameter="{Binding BindingContext, Source={x:Reference itemBorder}}"
+                                        Text="Cancelar Préstamo" />
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
+
                             <HorizontalStackLayout>
                                 <ffimage:CachedImage Source="prestamo.png" WidthRequest="50" />
 
@@ -60,8 +98,9 @@
                                                     FontAttributes="Bold"
                                                     Text="Alumno: "
                                                     TextColor="Black" />
-                                                <Span Text="{Binding Matricula.Id}" TextColor="Black" />
-                                                <Span Text=" Apellidos" TextColor="Black" />
+                                                <Span Text="{Binding Matricula.Alumno.Nombre}" TextColor="Black" />
+                                                <Span Text=" " TextColor="Black" />
+                                                <Span Text="{Binding Matricula.Alumno.Apellidos}" TextColor="Black" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -73,7 +112,7 @@
                                                     FontAttributes="Bold"
                                                     Text="Nombre Paquete: "
                                                     TextColor="Black" />
-                                                <Span Text="sdsd" TextColor="Black" />
+                                                <Span Text="{Binding Paquete.Nombre}" TextColor="Black" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -90,7 +129,32 @@
                                         </Label.FormattedText>
                                     </Label>
 
+                                    <Label TextColor="Black">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    FontAttributes="Bold"
+                                                    Text="Curso: "
+                                                    TextColor="Black" />
+                                                <Span Text="{Binding Matricula.Curso.NombreCurso}" TextColor="Black" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label TextColor="Black">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span
+                                                    FontAttributes="Bold"
+                                                    Text="Devuelto: "
+                                                    TextColor="Black" />
+                                                <Span Text="{Binding DevueltoTexto}" TextColor="Black" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
                                 </VerticalStackLayout>
+
 
                             </HorizontalStackLayout>
                             <VisualStateManager.VisualStateGroups>
@@ -109,5 +173,5 @@
 
             </CollectionView>
         </VerticalStackLayout>
-    </HorizontalStackLayout>
+    </Grid>
 </ContentPage>

@@ -88,6 +88,9 @@
 	  <MauiXaml Update="Views\InfoPrestamosView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Mopups\PrestamoMopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\PaquetesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -113,7 +116,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Commands\" />
-	  <Folder Include="Views\Mopups\" />
 	</ItemGroup>
 
 </Project>

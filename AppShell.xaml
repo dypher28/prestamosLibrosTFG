@@ -24,7 +24,7 @@
         <ShellContent ContentTemplate="{DataTemplate views:FormView}" Route="FormView" />
     </FlyoutItem>
 
-    <FlyoutItem Title="PAQUETES">
+    <FlyoutItem Title="CREAR PAQUETES">
         <ShellContent ContentTemplate="{DataTemplate views:PaquetesView}" Route="PaquetesView" />
     </FlyoutItem>
 

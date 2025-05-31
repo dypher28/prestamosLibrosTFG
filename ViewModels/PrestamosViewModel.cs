@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,8 +51,6 @@ namespace prestamosLibrosTFG.ViewModels
         [ObservableProperty]
         private PrestamoModel prestamo;
 
-        private bool _isFirst = true;
-
         [RelayCommand]
         public async Task Inicializar()
         {
@@ -68,7 +67,7 @@ namespace prestamosLibrosTFG.ViewModels
         {
             if (string.IsNullOrWhiteSpace(FiltroNombreAlumno))
             {
-                await ObtenerMartriculas(); // si el filtro está vacío, trae todo
+                await ObtenerMartriculas(); // si el filtro está vacío, enseña todo
                 return;
             }
 
@@ -180,39 +179,73 @@ namespace prestamosLibrosTFG.ViewModels
         [RelayCommand]
         public async Task BorrarPaquete(PaqueteModel paquete)
         {
-            bool confirm = await App.Current.MainPage.DisplayAlert("Confirmación", $"¿Quieres borrar el paquete: {paquete.Nombre}?", "Sí", "No");
-            if (confirm)
+            if (paquete == null || paquete.Id == null)
             {
+                await App.Current.MainPage.DisplayAlert("Error", "Paquete no válido.", "Aceptar");
+                return;
+            }
 
-                RequestModel request = new RequestModel()
-                {
-                    Method = "DELETE",
-                    Data = string.Empty,
-                    Route = "http://localhost:8080/paquetes/borrarPaquete/" + paquete.Id
-                };
+            // Verificar si el paquete tiene un préstamo activo
+            bool tienePrestamo = await VerificarPrestamoDePaquete(paquete.Id.Value);
 
-                ResponseModel response = await APIService.ExecuteRequest(request);
-                if (response.Success.Equals(0))
-                {
-                    try
-                    {
-                        ListaPaquetes.Remove(paquete);
-                        await App.Current.MainPage.DisplayAlert("Información", "Paquete borrado correctamente", "Aceptar");
+            if (tienePrestamo)
+            {
+                await App.Current.MainPage.DisplayAlert("Advertencia",
+                    "Este paquete tiene un préstamo activo. Debes cancelar el préstamo antes de eliminarlo.",
+                    "Aceptar");
+                return;
+            }
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Write(ex.StackTrace);
-                        Debug.Write(ex.ToString());
-                        Debug.Write(ex.Message);
-                    }
-                }
-                else
-                {
-                    await App.Current.MainPage.DisplayAlert("Error", "Error al borrar el paquete", "Aceptar");
-                }
+            // Confirmar eliminación
+            bool confirm = await App.Current.MainPage.DisplayAlert("Confirmación",
+                $"¿Quieres borrar el paquete: {paquete.Nombre}?", "Sí", "No");
+
+            if (!confirm) return;
+
+            // Preparar y enviar la solicitud
+            var request = new RequestModel
+            {
+                Method = "DELETE",
+                Data = string.Empty,
+                Route = $"http://localhost:8080/paquetes/borrarPaquete/" + paquete.Id
+            };
+
+            var response = await APIService.ExecuteRequest(request);
+
+            if (response.Success == 0)
+            {
+                ListaPaquetes.Remove(paquete);
+                await App.Current.MainPage.DisplayAlert("Éxito", "Paquete borrado correctamente.", "Aceptar");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "No se pudo borrar el paquete.", "Aceptar");
             }
         }
+
+        private async Task<bool> VerificarPrestamoDePaquete(int paqueteId)
+        {
+            var request = new RequestModel
+            {
+                Method = "GET",
+                Route = $"http://localhost:8080/prestamos/paqueteTienePrestamo/{paqueteId}"
+            };
+
+            var response = await APIService.ExecuteRequest(request);
+            Debug.WriteLine($"[VerificarPrestamoDePaquete] Response Success: {response.Success}, Data: {response.Data}");
+
+            if (response.Success == 0 && response.Data != null)
+            {
+                string respuestaStr = response.Data.ToString().ToLower();
+
+                if (respuestaStr.Contains("true"))
+                    return true;
+            }
+
+            return false;
+        }
+
+
 
         partial void OnSelectedCursoChanged(CursoModel value)
         {
@@ -269,8 +302,8 @@ namespace prestamosLibrosTFG.ViewModels
             {
                 var texto = FiltroNombreAlumno.ToLower().Trim();
                 filtradas = filtradas.Where(m =>
-                    m.Alumno.Nombre.ToLower().Contains(texto) ||
-                    m.Alumno.Apellidos.ToLower().Contains(texto));
+                RemoveDiacritics(m.Alumno.Nombre).ToLower().Contains(RemoveDiacritics(FiltroNombreAlumno).ToLower(), StringComparison.InvariantCultureIgnoreCase) ||
+                         RemoveDiacritics(m.Alumno.Apellidos).ToLower().Contains(RemoveDiacritics(FiltroNombreAlumno).ToLower(), StringComparison.InvariantCultureIgnoreCase));
             }
 
             if (_todosLosPaquetes != null)
@@ -282,6 +315,26 @@ namespace prestamosLibrosTFG.ViewModels
             }
 
             ListaMatriculas = new ObservableCollection<MatriculaModel>(filtradas);
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text;
+
+            var normalized = text.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+
+            foreach (var c in normalized)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    sb.Append(c);
+                }
+            }
+
+            return sb.ToString().Normalize(NormalizationForm.FormC);
         }
 
         partial void OnFiltroNombreAlumnoChanged(string value)
